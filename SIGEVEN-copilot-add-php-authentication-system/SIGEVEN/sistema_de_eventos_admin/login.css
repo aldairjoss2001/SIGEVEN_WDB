@@ -1,0 +1,263 @@
+/* admin.css - Estilos para el Panel Administrativo */
+
+:root {
+    --azul-institucional: #163E8C;
+    --amarillo-institucional: #FED600;
+    --blanco: #ffffff;
+    --gris-claro: #f8fafc;
+    --gris-medio: #e2e8f0;
+    --gris-oscuro: #64748b;
+    --texto-oscuro: #1e293b;
+    --sombra-suave: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --sombra-media: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+}
+
+/* Contenedor Principal */
+.admin-login-container {
+    width: 100%;
+    max-width: 440px;
+}
+
+/* Tarjeta de Login */
+.admin-login-card {
+    background: var(--blanco);
+    border-radius: 16px;
+    padding: 2.5rem;
+    box-shadow: var(--sombra-media);
+    border: 1px solid var(--gris-medio);
+}
+
+/* Header */
+.admin-login-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.admin-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.logo-icon {
+    font-size: 2rem;
+}
+
+.admin-login-header h1 {
+    color: var(--azul-institucional);
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.admin-subtitle {
+    color: var(--gris-oscuro);
+    font-size: 0.95rem;
+}
+
+/* Formulario */
+.admin-login-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    color: var(--texto-oscuro);
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.form-group label.required::after {
+    content: ' *';
+    color: #dc2626;
+}
+
+.form-group input {
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--gris-medio);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+    background: var(--blanco);
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: var(--azul-institucional);
+    box-shadow: 0 0 0 3px rgba(22, 62, 140, 0.1);
+}
+
+.form-group input::placeholder {
+    color: var(--gris-oscuro);
+}
+
+/* Opciones del Form */
+.form-options {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-size: 0.9rem;
+    color: var(--gris-oscuro);
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--azul-institucional);
+}
+
+/* Botón de Login */
+.admin-login-btn {
+    background: var(--azul-institucional);
+    color: var(--blanco);
+    border: none;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.admin-login-btn:hover {
+    background: #1e4d8c;
+    transform: translateY(-1px);
+    box-shadow: var(--sombra-suave);
+}
+
+.admin-login-btn:active {
+    transform: translateY(0);
+}
+
+/* Footer */
+.admin-login-footer {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--gris-medio);
+}
+
+.security-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    background: #fef3c7;
+    padding: 0.75rem;
+    border-radius: 6px;
+    border-left: 4px solid #f59e0b;
+}
+
+.security-icon {
+    font-size: 1rem;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+}
+
+.security-notice p {
+    color: #92400e;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .admin-login-container {
+        padding: 0.5rem;
+    }
+    
+    .admin-login-card {
+        padding: 2rem 1.5rem;
+        border-radius: 12px;
+    }
+    
+    .admin-logo {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .admin-login-header h1 {
+        font-size: 1.3rem;
+    }
+    
+    .admin-subtitle {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .admin-login-card {
+        padding: 1.5rem 1rem;
+    }
+    
+    .form-group input {
+        padding: 0.75rem 0.875rem;
+    }
+    
+    .admin-login-btn {
+        padding: 0.875rem 1.25rem;
+    }
+}
+
+/* Mejoras de accesibilidad */
+@media (prefers-reduced-motion: reduce) {
+    .admin-login-btn,
+    .form-group input {
+        transition: none;
+    }
+}
+
+/* Estados de focus mejorados */
+.admin-login-btn:focus-visible {
+    outline: 2px solid var(--amarillo-institucional);
+    outline-offset: 2px;
+}
+
+/* Loader opcional para cuando se envía el form */
+.admin-login-btn.loading {
+    opacity: 0.7;
+    pointer-events: none;
+}
+
+.admin-login-btn.loading .btn-icon {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}

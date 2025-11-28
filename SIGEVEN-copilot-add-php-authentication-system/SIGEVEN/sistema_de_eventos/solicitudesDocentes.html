@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Solicitudes - Docentes | SIGEVEN</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f7fa;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #163E8C;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-logo img {
+            max-width: 120px;
+            height: auto;
+        }
+
+        .sidebar-menu {
+            padding: 1rem 0;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: background 0.3s;
+            cursor: pointer;
+        }
+
+        .sidebar-item:hover {
+            background: rgba(254, 214, 0, 0.15);
+        }
+
+        .sidebar-item.active {
+            background: #FED600;
+            color: #163E8C;
+        }
+
+        .sidebar-item .material-symbols-outlined {
+            font-size: 24px;
+            margin-right: 12px;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            position: fixed;
+            left: 250px;
+            top: 0;
+            right: 0;
+            height: 60px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            padding: 0 2rem;
+            z-index: 999;
+        }
+
+        .top-bar h1 {
+            font-size: 1.5rem;
+            color: #163E8C;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 60px;
+            padding: 2rem;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .stat-card h3 {
+            font-size: 0.875rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-card .number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #163E8C;
+        }
+
+        /* Filters */
+        .filters {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .filters-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .filter-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.875rem;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #163E8C;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.875rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: background 0.3s;
+        }
+
+        .btn-primary {
+            background: #163E8C;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0f2d6b;
+        }
+
+        /* Table */
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #163E8C;
+            color: white;
+        }
+
+        th {
+            padding: 1rem;
+            text-align: left;
+            font-weight: 500;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .badge-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .badge-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-btn {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-right: 0.5rem;
+        }
+
+        .action-btn.approve {
+            background: #28a745;
+            color: white;
+        }
+
+        .action-btn.reject {
+            background: #dc3545;
+            color: white;
+        }
+
+        .action-btn.view {
+            background: #007bff;
+            color: white;
+        }
+
+        .action-btn .material-symbols-outlined {
+            font-size: 16px;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <img src="img/logo-emi.png" alt="EMI Logo">
+        </div>
+        <div class="sidebar-menu">
+            <a href="PerfilDocente.html" class="sidebar-item">
+                <span class="material-symbols-outlined">home</span>
+                <span>INICIO</span>
+            </a>
+            <a href="NuevoEvento.html" class="sidebar-item">
+                <span class="material-symbols-outlined">add_circle</span>
+                <span>NUEVO EVENTO</span>
+            </a>
+            <a href="solicitudesDocentes.html" class="sidebar-item active">
+                <span class="material-symbols-outlined">description</span>
+                <span>SOLICITUDES</span>
+            </a>
+            <a href="calendarioDocentes.html" class="sidebar-item">
+                <span class="material-symbols-outlined">calendar_month</span>
+                <span>CALENDARIO</span>
+            </a>
+            <a href="../logout.php" class="sidebar-item">
+                <span class="material-symbols-outlined">logout</span>
+                <span>SALIR</span>
+            </a>
+        </div>
+    </div>
+
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <h1>Gestión de Solicitudes</h1>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <h3>Total Solicitudes</h3>
+                <div class="number">24</div>
+            </div>
+            <div class="stat-card">
+                <h3>Pendientes</h3>
+                <div class="number">8</div>
+            </div>
+            <div class="stat-card">
+                <h3>Aprobadas</h3>
+                <div class="number">12</div>
+            </div>
+            <div class="stat-card">
+                <h3>Rechazadas</h3>
+                <div class="number">4</div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters">
+            <div class="filters-row">
+                <div class="filter-group">
+                    <label>Estado</label>
+                    <select>
+                        <option value="">Todas</option>
+                        <option value="pending">Pendientes</option>
+                        <option value="approved">Aprobadas</option>
+                        <option value="rejected">Rechazadas</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Tipo de Evento</label>
+                    <select>
+                        <option value="">Todos</option>
+                        <option value="academic">Académico</option>
+                        <option value="cultural">Cultural</option>
+                        <option value="sports">Deportivo</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Fecha</label>
+                    <input type="date">
+                </div>
+                <div class="filter-group">
+                    <button class="btn btn-primary">
+                        <span class="material-symbols-outlined">filter_list</span>
+                        Filtrar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Título</th>
+                        <th>Tipo</th>
+                        <th>Fecha</th>
+                        <th>Solicitante</th>
+                        <th>Estado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Seminario de Inteligencia Artificial</td>
+                        <td>Académico</td>
+                        <td>25/11/2025</td>
+                        <td>Juan Pérez</td>
+                        <td><span class="badge badge-pending">Pendiente</span></td>
+                        <td>
+                            <button class="action-btn approve">
+                                <span class="material-symbols-outlined">check_circle</span>
+                                Aprobar
+                            </button>
+                            <button class="action-btn reject">
+                                <span class="material-symbols-outlined">cancel</span>
+                                Rechazar
+                            </button>
+                            <button class="action-btn view">
+                                <span class="material-symbols-outlined">visibility</span>
+                                Ver
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Festival Cultural EMI</td>
+                        <td>Cultural</td>
+                        <td>28/11/2025</td>
+                        <td>María López</td>
+                        <td><span class="badge badge-approved">Aprobada</span></td>
+                        <td>
+                            <button class="action-btn view">
+                                <span class="material-symbols-outlined">visibility</span>
+                                Ver
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Torneo de Fútbol Interfacultades</td>
+                        <td>Deportivo</td>
+                        <td>30/11/2025</td>
+                        <td>Carlos Mamani</td>
+                        <td><span class="badge badge-pending">Pendiente</span></td>
+                        <td>
+                            <button class="action-btn approve">
+                                <span class="material-symbols-outlined">check_circle</span>
+                                Aprobar
+                            </button>
+                            <button class="action-btn reject">
+                                <span class="material-symbols-outlined">cancel</span>
+                                Rechazar
+                            </button>
+                            <button class="action-btn view">
+                                <span class="material-symbols-outlined">visibility</span>
+                                Ver
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

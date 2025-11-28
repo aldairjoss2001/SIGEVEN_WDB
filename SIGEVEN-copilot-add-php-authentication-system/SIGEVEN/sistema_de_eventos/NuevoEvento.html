@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Crear Nuevo Evento - Sistema de Eventos</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/NuevoEvento.css" />
+</head>
+<body>
+  <!-- Header/Navigation -->
+  <header class="header">
+    <nav class="nav">
+      <div class="nav-brand"><h2>Eventos EMI</h2></div>
+      <div class="nav-search">
+        <input type="text" placeholder="Buscar eventos..." class="search-input">
+      </div>
+      <div class="nav-icons">
+        <a href="PerfilDocente.html" class="nav-icon">VOLVER AL PERFIL</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="create-event-container">
+    <div class="form-header">
+      <h1>Crear Nuevo Evento</h1>
+      <p>Complete el formulario para solicitar la creación de un evento universitario</p>
+    </div>
+
+    <!-- Progress Steps -->
+    <div class="progress-steps">
+      <div class="step active" data-step="1">
+        <div class="step-number">1</div>
+        <div class="step-label">Información Básica</div>
+      </div>
+      <div class="step" data-step="2">
+        <div class="step-number">2</div>
+        <div class="step-label">Detalles del Evento</div>
+      </div>
+      <div class="step" data-step="3">
+        <div class="step-number">3</div>
+        <div class="step-label">Documentación</div>
+      </div>
+      <div class="step" data-step="4">
+        <div class="step-number">4</div>
+        <div class="step-label">Revisión</div>
+      </div>
+    </div>
+
+    <form class="event-form" id="eventForm" action="EventoCreado.html" method="GET">
+      <!-- Step 1: Basic Information -->
+      <div class="form-step active" id="step1">
+        <div class="form-section">
+          <h2>Información Básica del Evento</h2>
+          
+          <div class="form-group">
+            <label for="event-title" class="required">Título del Evento</label>
+            <input type="text" id="event-title" name="event-title" required 
+                   placeholder="Ej: VII Versión CTF EMI 2025">
+            <span class="help-text">Nombre oficial del evento tal como aparecerá en la promoción</span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="event-type" class="required">Tipo de Evento</label>
+              <select id="event-type" name="event-type" required>
+                <option value="">Seleccione el tipo</option>
+                <option value="academic">Académico</option>
+                <option value="cultural">Cultural</option>
+                <option value="sports">Deportivo</option>
+                <option value="social">Social</option>
+                <option value="conference">Conferencia</option>
+                <option value="workshop">Taller</option>
+                <option value="seminar">Seminario</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="event-category" class="required">Categoría</label>
+              <select id="event-category" name="event-category" required>
+                <option value="">Seleccione categoría</option>
+                <option value="students">Para Estudiantes</option>
+                <option value="teachers">Para Docentes</option>
+                <option value="both">Mixto (Estudiantes y Docentes)</option>
+                <option value="public">Abierto al Público</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="event-description" class="required">Descripción del Evento</label>
+            <textarea id="event-description" name="event-description" rows="4" required
+                      placeholder="Describa los objetivos, contenido y beneficios del evento..."></textarea>
+            <span class="help-text">Mínimo 150 caracteres. Esta descripción será visible para los participantes.</span>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="window.location.href='PerfilDocente.html'">Cancelar</button>
+          <button type="button" class="btn btn-primary" onclick="showStep(2)">Siguiente</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Event Details -->
+      <div class="form-step" id="step2">
+        <div class="form-section">
+          <h2>Detalles del Evento</h2>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label for="event-date" class="required">Fecha del Evento</label>
+              <input type="date" id="event-date" name="event-date" required>
+            </div>
+
+            <div class="form-group">
+              <label for="event-end-date">Fecha de Finalización (si aplica)</label>
+              <input type="date" id="event-end-date" name="event-end-date">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="start-time" class="required">Hora de Inicio</label>
+              <input type="time" id="start-time" name="start-time" required>
+            </div>
+
+            <div class="form-group">
+              <label for="end-time" class="required">Hora de Finalización</label>
+              <input type="time" id="end-time" name="end-time" required>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="event-location" class="required">Ubicación Preferida</label>
+            <select id="event-location" name="event-location" required>
+              <option value="">Seleccione una ubicación</option>
+              <option value="auditorio">Auditorio Principal</option>
+              <option value="salon-honor">Salón de Honor</option>
+              <option value="lab-computacion">Laboratorio de Computación A-201</option>
+              <option value="lab-robotica">Laboratorio de Robótica</option>
+              <option value="lab-redes">Laboratorio de Redes</option>
+              <option value="cancha">Cancha de Césped Sintético</option>
+              <option value="parrillero">Parrillero</option>
+              <option value="aula-blanca">Aula Blanca</option>
+              <option value="patio-central">Patio Central</option>
+              <option value="other">Otra ubicación (especificar en observaciones)</option>
+            </select>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="capacity" class="required">Capacidad Estimada</label>
+              <input type="number" id="capacity" name="capacity" required 
+                     min="1" max="500" placeholder="Ej: 50">
+              <span class="help-text">Número máximo de participantes esperados</span>
+            </div>
+
+            <div class="form-group">
+              <label for="event-duration" class="required">Duración Total (horas)</label>
+              <input type="number" id="event-duration" name="event-duration" required 
+                     min="1" max="24" placeholder="Ej: 3">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="requirements">Requerimientos Especiales</label>
+            <textarea id="requirements" name="requirements" rows="3"
+                      placeholder="Equipamiento especial, necesidades técnicas, etc..."></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="showStep(1)">Anterior</button>
+          <button type="button" class="btn btn-primary" onclick="showStep(3)">Siguiente</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Documentation -->
+      <div class="form-step" id="step3">
+        <div class="form-section">
+          <h2>Documentación Requerida</h2>
+          <div class="alert alert-info">
+            <strong>Importante:</strong> Todos los eventos deben contar con la documentación correspondiente aprobada por la dirección de carrera.
+          </div>
+
+          <div class="form-group">
+            <label for="justification" class="required">Justificación Académica</label>
+            <textarea id="justification" name="justification" rows="4" required
+                      placeholder="Explique la importancia académica del evento y su relación con los objetivos de la carrera..."></textarea>
+            <span class="help-text">Este documento será revisado por el comité académico</span>
+          </div>
+
+          <div class="form-group">
+            <label for="program" class="required">Programa Detallado</label>
+            <textarea id="program" name="program" rows="4" required
+                      placeholder="Describa la agenda del evento, ponentes, actividades, etc..."></textarea>
+          </div>
+
+          <div class="document-upload">
+            <div class="upload-item required">
+              <div class="upload-header">
+                <label>Carta de Autorización de la Dirección</label>
+                <span class="file-size">Máx. 5MB - PDF</span>
+              </div>
+              <div class="upload-area" id="authorizationUpload" onclick="triggerFileUpload('authorization-letter')">
+                <input type="file" id="authorization-letter" name="authorization-letter" 
+                       accept=".pdf,.doc,.docx" hidden>
+                <div class="upload-placeholder">
+                  <span class="upload-icon">📄</span>
+                  <p>Haga clic para subir la carta de autorización</p>
+                  <span class="upload-hint">Formato: PDF o Word</span>
+                </div>
+                <div class="upload-preview" style="display: none;">
+                  <span class="file-name"></span>
+                  <button type="button" class="btn-remove" onclick="removeFile('authorization-letter')">×</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="upload-item">
+              <div class="upload-header">
+                <label>Material de Apoyo (Opcional)</label>
+                <span class="file-size">Máx. 10MB - PDF, PPT, Word</span>
+              </div>
+              <div class="upload-area" id="materialUpload" onclick="triggerFileUpload('support-material')">
+                <input type="file" id="support-material" name="support-material" 
+                       accept=".pdf,.doc,.docx,.ppt,.pptx" hidden multiple>
+                <div class="upload-placeholder">
+                  <span class="upload-icon">📎</span>
+                  <p>Haga clic para subir material adicional</p>
+                  <span class="upload-hint">Presentaciones, documentos, etc.</span>
+                </div>
+                <div class="upload-preview" style="display: none;"></div>
+              </div>
+            </div>
+
+            <div class="upload-item required">
+              <div class="upload-header">
+                <label>Lista de Recursos Solicitados</label>
+                <span class="file-size">Máx. 2MB - PDF, Excel</span>
+              </div>
+              <div class="upload-area" id="resourcesUpload" onclick="triggerFileUpload('resources-list')">
+                <input type="file" id="resources-list" name="resources-list" 
+                       accept=".pdf,.xls,.xlsx,.doc,.docx" hidden>
+                <div class="upload-placeholder">
+                  <span class="upload-icon">📋</span>
+                  <p>Haga clic para subir lista de recursos</p>
+                  <span class="upload-hint">Equipos, materiales, presupuesto, etc.</span>
+                </div>
+                <div class="upload-preview" style="display: none;">
+                  <span class="file-name"></span>
+                  <button type="button" class="btn-remove" onclick="removeFile('resources-list')">×</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="showStep(2)">Anterior</button>
+          <button type="button" class="btn btn-primary" onclick="showStep(4)">Siguiente</button>
+        </div>
+      </div>
+
+      <!-- Step 4: Review and Submit -->
+      <div class="form-step" id="step4">
+        <div class="form-section">
+          <h2>Revisión y Envío</h2>
+          
+          <div class="review-summary">
+            <div class="review-section">
+              <h3>Información del Evento</h3>
+              <div class="review-item">
+                <span class="review-label">Título:</span>
+                <span id="review-title" class="review-value">-</span>
+              </div>
+              <div class="review-item">
+                <span class="review-label">Tipo:</span>
+                <span id="review-type" class="review-value">-</span>
+              </div>
+              <div class="review-item">
+                <span class="review-label">Descripción:</span>
+                <span id="review-description" class="review-value">-</span>
+              </div>
+            </div>
+
+            <div class="review-section">
+              <h3>Detalles de Fecha y Lugar</h3>
+              <div class="review-item">
+                <span class="review-label">Fecha:</span>
+                <span id="review-date" class="review-value">-</span>
+              </div>
+              <div class="review-item">
+                <span class="review-label">Horario:</span>
+                <span id="review-time" class="review-value">-</span>
+              </div>
+              <div class="review-item">
+                <span class="review-label">Ubicación:</span>
+                <span id="review-location" class="review-value">-</span>
+              </div>
+              <div class="review-item">
+                <span class="review-label">Capacidad:</span>
+                <span id="review-capacity" class="review-value">-</span>
+              </div>
+            </div>
+
+            <div class="review-section">
+              <h3>Documentación</h3>
+              <div class="review-item">
+                <span class="review-label">Carta de autorización:</span>
+                <span id="review-authorization" class="review-value">No subido</span>
+              </div>
+              <div class="review-item">
+                <span class="review-label">Lista de recursos:</span>
+                <span id="review-resources" class="review-value">No subido</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="final-notes">Observaciones Adicionales</label>
+            <textarea id="final-notes" name="final-notes" rows="3"
+                      placeholder="Alguna información adicional que considere importante..."></textarea>
+          </div>
+
+          <div class="alert alert-warning">
+            <strong>Proceso de Validación:</strong> Una vez enviado, su evento será revisado por la administración. 
+            Se verificará la documentación y se podrán contactar con usted para validar la información. 
+            Este proceso puede tomar de 2 a 5 días hábiles.
+          </div>
+
+          <div class="form-check">
+            <input type="checkbox" id="terms" name="terms" required>
+            <label for="terms" class="required">
+              Acepto que toda la información proporcionada es verídica y me comprometo a cumplir con 
+              las normativas universitarias para la realización del evento.
+            </label>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-outline" onclick="showStep(3)">Anterior</button>
+          <button type="submit" class="btn btn-success">Enviar Solicitud</button>
+        </div>
+      </div>
+    </form>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p style="color: #fed600">© 2025 Sistema de Gestión de Eventos Universitarios. Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    // Navigation between steps - Sin validaciones estrictas
+    function showStep(stepNumber) {
+      // Hide all steps
+      document.querySelectorAll('.form-step').forEach(step => {
+        step.classList.remove('active');
+      });
+      
+      // Show current step
+      document.getElementById('step' + stepNumber).classList.add('active');
+      
+      // Update progress steps
+      document.querySelectorAll('.step').forEach(step => {
+        step.classList.remove('active');
+      });
+      document.querySelector(`.step[data-step="${stepNumber}"]`).classList.add('active');
+      
+      // If it's the review step, update the review summary
+      if (stepNumber === 4) {
+        updateReviewSummary();
+      }
+    }
+
+    // File upload functionality
+    function triggerFileUpload(inputId) {
+      document.getElementById(inputId).click();
+    }
+
+    function removeFile(inputId) {
+      const input = document.getElementById(inputId);
+      const uploadArea = input.closest('.upload-area');
+      const preview = uploadArea.querySelector('.upload-preview');
+      const placeholder = uploadArea.querySelector('.upload-placeholder');
+      
+      input.value = '';
+      preview.style.display = 'none';
+      placeholder.style.display = 'block';
+    }
+
+    // Initialize file upload listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      // Add change listeners to file inputs
+      const fileInputs = document.querySelectorAll('input[type="file"]');
+      fileInputs.forEach(input => {
+        input.addEventListener('change', function(e) {
+          const uploadArea = this.closest('.upload-area');
+          const preview = uploadArea.querySelector('.upload-preview');
+          const placeholder = uploadArea.querySelector('.upload-placeholder');
+          const fileName = uploadArea.querySelector('.file-name');
+          
+          if (this.files.length > 0) {
+            fileName.textContent = this.files[0].name;
+            placeholder.style.display = 'none';
+            preview.style.display = 'flex';
+          }
+        });
+      });
+
+      // Remover atributos required de todos los campos excepto el checkbox de términos
+      const allInputs = document.querySelectorAll('input, select, textarea');
+      allInputs.forEach(input => {
+        if (input.type !== 'checkbox' || input.id !== 'terms') {
+          input.removeAttribute('required');
+        }
+      });
+    });
+
+    // Update review summary
+    function updateReviewSummary() {
+      // Basic info
+      document.getElementById('review-title').textContent = 
+        document.getElementById('event-title').value || 'No especificado';
+      
+      const eventType = document.getElementById('event-type');
+      document.getElementById('review-type').textContent = 
+        eventType.options[eventType.selectedIndex].text || 'No seleccionado';
+      
+      document.getElementById('review-description').textContent = 
+        document.getElementById('event-description').value || 'No especificada';
+
+      // Date and location
+      document.getElementById('review-date').textContent = 
+        document.getElementById('event-date').value || 'No especificada';
+      
+      const startTime = document.getElementById('start-time').value;
+      const endTime = document.getElementById('end-time').value;
+      document.getElementById('review-time').textContent = 
+        startTime && endTime ? `${startTime} - ${endTime}` : 'No especificado';
+      
+      const location = document.getElementById('event-location');
+      document.getElementById('review-location').textContent = 
+        location.options[location.selectedIndex].text || 'No seleccionada';
+      
+      document.getElementById('review-capacity').textContent = 
+        document.getElementById('capacity').value ? 
+        document.getElementById('capacity').value + ' personas' : 'No especificada';
+
+      // Documentation - Simular archivos subidos incluso si no se subieron
+      const authFile = document.getElementById('authorization-letter').files[0];
+      document.getElementById('review-authorization').textContent = 
+        authFile ? authFile.name : 'carta_autorizacion.pdf (simulado)';
+      
+      const resourcesFile = document.getElementById('resources-list').files[0];
+      document.getElementById('review-resources').textContent = 
+        resourcesFile ? resourcesFile.name : 'lista_recursos.pdf (simulado)';
+    }
+
+    // Validación solo del checkbox de términos antes de enviar
+    document.getElementById('eventForm').addEventListener('submit', function(e) {
+      const termsCheckbox = document.getElementById('terms');
+      if (!termsCheckbox.checked) {
+        e.preventDefault();
+        alert('Debe aceptar los términos y condiciones para enviar la solicitud.');
+        termsCheckbox.focus();
+      }
+      // Si el checkbox está marcado, el formulario se envía normalmente a EventoCreado.html
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Eventos - Panel Administrativo</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body class="admin-dashboard">
+    <!-- Header -->
+    <header class="admin-header">
+        <div class="admin-header-inner">
+            <div class="admin-brand">
+                <span class="admin-logo-icon">⚙️</span>
+                <h1>Panel Administrativo</h1>
+            </div>
+            
+            <nav class="admin-nav">
+                <a href="index.html" class="nav-link">📊 Dashboard</a>
+                <a href="gestion-eventos.html" class="nav-link active">📋 Gestión de Eventos</a>
+                <a href="../index.html" class="nav-link logout">🚪 Salir</a>
+            </nav>
+
+            <div class="admin-user">
+                <span class="user-avatar">👨‍💼</span>
+                <span class="user-name">Admin</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+        <div class="admin-container">
+            <!-- Header Section -->
+            <section class="welcome-section">
+                <h2>Gestión de Eventos</h2>
+                <p>Revisar y administrar las solicitudes de eventos universitarios</p>
+            </section>
+
+            <!-- Filtros y Búsqueda -->
+            <section class="filters-section">
+                <div class="filters-header">
+                    <h3 class="section-title">Eventos Pendientes <span class="badge-count">8</span></h3>
+                    <div class="filters-actions">
+                        <div class="search-box">
+                            <input type="text" placeholder="Buscar eventos..." class="search-input">
+                            <span class="search-icon">🔍</span>
+                        </div>
+                        <select class="filter-select">
+                            <option value="all">Todos los estados</option>
+                            <option value="pending" selected>Pendientes</option>
+                            <option value="approved">Aprobados</option>
+                            <option value="rejected">Rechazados</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Lista de Eventos Pendientes -->
+            <section class="events-list-section">
+                <!-- Evento 1 -->
+                <div class="event-card pending">
+                    <div class="event-header">
+                        <div class="event-basic-info">
+                            <h4 class="event-title">VII Versión CTF EMI 2025</h4>
+                            <div class="event-meta">
+                                <span class="event-creator">👨‍🏫 Dr. Carlos Mendoza</span>
+                                <span class="event-date">📅 10 Oct 2025 - 18:00</span>
+                                <span class="event-location">📍 Auditorio Principal</span>
+                                <span class="event-capacity">👥 80 personas</span>
+                            </div>
+                        </div>
+                        <div class="event-status-badge pending">⏳ Pendiente</div>
+                    </div>
+
+                    <div class="event-details">
+                        <p class="event-description">
+                            Sexta versión de desafío captura la bandera para estudiantes de sistemas. 
+                            Incluye talleres de seguridad informática y competencias prácticas.
+                        </p>
+                        
+                        <div class="event-documents">
+                            <h5>Documentación Adjunta:</h5>
+                            <div class="documents-list">
+                                <span class="document-item">📄 carta_autorizacion.pdf</span>
+                                <span class="document-item">📋 programa_detallado.docx</span>
+                                <span class="document-item">📊 lista_recursos.xlsx</span>
+                            </div>
+                        </div>
+
+                        <div class="event-requirements">
+                            <h5>Requerimientos Especiales:</h5>
+                            <p>Proyector, internet de alta velocidad, 25 computadoras con acceso admin</p>
+                        </div>
+                    </div>
+
+                    <div class="event-actions">
+                        <button class="btn btn-success" onclick="approveEvent(this)">
+                            ✅ Aprobar Evento
+                        </button>
+                        <button class="btn btn-danger" onclick="rejectEvent(this)">
+                            ❌ Rechazar
+                        </button>
+                        <button class="btn btn-warning" onclick="requestChanges(this)">
+                            📝 Solicitar Cambios
+                        </button>
+                        <button class="btn btn-outline" onclick="viewDetails(this)">
+                            👁️ Ver Detalles
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Evento 2 -->
+                <div class="event-card pending">
+                    <div class="event-header">
+                        <div class="event-basic-info">
+                            <h4 class="event-title">Campaña de Arborización 2025</h4>
+                            <div class="event-meta">
+                                <span class="event-creator">👩‍🏫 Lic. Ana García</span>
+                                <span class="event-date">📅 15 Nov 2025 - 08:00</span>
+                                <span class="event-location">📍 Playón Irpavi</span>
+                                <span class="event-capacity">👥 50 personas</span>
+                            </div>
+                        </div>
+                        <div class="event-status-badge pending">⏳ Pendiente</div>
+                    </div>
+
+                    <div class="event-details">
+                        <p class="event-description">
+                            Actividad de responsabilidad social universitaria para concientizar 
+                            sobre el cuidado del medio ambiente y reforestación.
+                        </p>
+                        
+                        <div class="event-documents">
+                            <h5>Documentación Adjunta:</h5>
+                            <div class="documents-list">
+                                <span class="document-item">📄 autorizacion_direccion.pdf</span>
+                                <span class="document-item">📋 plan_trabajo.docx</span>
+                            </div>
+                        </div>
+
+                        <div class="event-requirements">
+                            <h5>Requerimientos Especiales:</h5>
+                            <p>Transporte universitario, herramientas de jardinería, refrigerios</p>
+                        </div>
+                    </div>
+
+                    <div class="event-actions">
+                        <button class="btn btn-success" onclick="approveEvent(this)">
+                            ✅ Aprobar Evento
+                        </button>
+                        <button class="btn btn-danger" onclick="rejectEvent(this)">
+                            ❌ Rechazar
+                        </button>
+                        <button class="btn btn-warning" onclick="requestChanges(this)">
+                            📝 Solicitar Cambios
+                        </button>
+                        <button class="btn btn-outline" onclick="viewDetails(this)">
+                            👁️ Ver Detalles
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Evento 3 -->
+                <div class="event-card pending urgent">
+                    <div class="event-header">
+                        <div class="event-basic-info">
+                            <h4 class="event-title">Taller de Robótica Avanzada</h4>
+                            <div class="event-meta">
+                                <span class="event-creator">👨‍🏫 Ing. Roberto Silva</span>
+                                <span class="event-date">📅 05 Nov 2025 - 14:00</span>
+                                <span class="event-location">📍 Laboratorio de Robótica</span>
+                                <span class="event-capacity">👥 20 personas</span>
+                            </div>
+                        </div>
+                        <div class="event-status-badge urgent">🚨 Urgente</div>
+                    </div>
+
+                    <div class="event-details">
+                        <p class="event-description">
+                            Taller práctico de robótica para estudiantes de ingeniería. 
+                            Uso de kits Arduino y programación de robots autónomos.
+                        </p>
+                        
+                        <div class="event-documents">
+                            <h5>Documentación Adjunta:</h5>
+                            <div class="documents-list">
+                                <span class="document-item">📄 carta_coordinacion.pdf</span>
+                                <span class="document-item">📋 material_taller.pptx</span>
+                            </div>
+                        </div>
+
+                        <div class="event-requirements">
+                            <h5>Requerimientos Especiales:</h5>
+                            <p>15 kits de robótica, proyector, acceso a laboratorio por 4 horas</p>
+                        </div>
+                    </div>
+
+                    <div class="event-actions">
+                        <button class="btn btn-success" onclick="approveEvent(this)">
+                            ✅ Aprobar Evento
+                        </button>
+                        <button class="btn btn-danger" onclick="rejectEvent(this)">
+                            ❌ Rechazar
+                        </button>
+                        <button class="btn btn-warning" onclick="requestChanges(this)">
+                            📝 Solicitar Cambios
+                        </button>
+                        <button class="btn btn-outline" onclick="viewDetails(this)">
+                            👁️ Ver Detalles
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Eventos Aprobados (Sección colapsable) -->
+            <section class="approved-events-section">
+                <div class="section-header-collapsible" onclick="toggleSection('approved-events')">
+                    <h3 class="section-title">
+                        Eventos Aprobados 
+                        <span class="badge-count">12</span>
+                        <span class="toggle-icon">▼</span>
+                    </h3>
+                </div>
+                
+                <div id="approved-events" class="events-list-collapsible">
+                    <!-- Eventos aprobados aparecerían aquí -->
+                    <div class="empty-state">
+                        <p>No hay eventos aprobados recientemente</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        function approveEvent(button) {
+            const eventCard = button.closest('.event-card');
+            eventCard.classList.remove('pending', 'urgent');
+            eventCard.classList.add('approved');
+            
+            const statusBadge = eventCard.querySelector('.event-status-badge');
+            statusBadge.textContent = '✅ Aprobado';
+            statusBadge.className = 'event-status-badge approved';
+            
+            // Simular actualización de contador
+            updatePendingCount(-1);
+            
+            showNotification('Evento aprobado exitosamente', 'success');
+        }
+
+        function rejectEvent(button) {
+            if (confirm('¿Está seguro de que desea rechazar este evento?')) {
+                const eventCard = button.closest('.event-card');
+                eventCard.style.opacity = '0.6';
+                
+                showNotification('Evento rechazado', 'error');
+                updatePendingCount(-1);
+                
+                // En un sistema real, aquí iría la lógica de rechazo
+                setTimeout(() => {
+                    eventCard.remove();
+                }, 1000);
+            }
+        }
+
+        function requestChanges(button) {
+            const changes = prompt('¿Qué cambios solicita para este evento?');
+            if (changes) {
+                showNotification('Solicitud de cambios enviada al docente', 'warning');
+            }
+        }
+
+        function viewDetails(button) {
+            alert('Aquí se mostrarían los detalles completos del evento en un modal o página separada');
+        }
+
+        function updatePendingCount(change) {
+            const badge = document.querySelector('.badge-count');
+            let current = parseInt(badge.textContent);
+            badge.textContent = Math.max(0, current + change);
+        }
+
+        function toggleSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const toggleIcon = section.previousElementSibling.querySelector('.toggle-icon');
+            
+            section.classList.toggle('collapsed');
+            toggleIcon.textContent = section.classList.contains('collapsed') ? '▶' : '▼';
+        }
+
+        function showNotification(message, type) {
+            // Simulación simple de notificación
+            alert(`${type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️'} ${message}`);
+        }
+
+        // Inicialización
+        document.addEventListener('DOMContentLoaded', function() {
+            // Colapsar sección de aprobados por defecto
+            toggleSection('approved-events');
+        });
+    </script>
+</body>
+</html>

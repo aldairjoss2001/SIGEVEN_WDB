@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración del Sistema - SIGEVEN Admin</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #163E8C;
+            padding: 2rem 0;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+        }
+
+        .sidebar-logo img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin: 0.5rem 0;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu a:hover {
+            background: rgba(254, 214, 0, 0.15);
+        }
+
+        .sidebar-menu a.active {
+            background: #FED600;
+            color: #163E8C;
+            font-weight: 600;
+        }
+
+        .sidebar-menu .material-symbols-outlined {
+            margin-right: 0.75rem;
+            font-size: 24px;
+        }
+
+        /* Top Header */
+        .top-header {
+            position: fixed;
+            left: 250px;
+            top: 0;
+            right: 0;
+            height: 60px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 999;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            color: #163E8C;
+            font-weight: 600;
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 60px;
+            padding: 2rem;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #eee;
+            overflow-x: auto;
+        }
+
+        .tab {
+            padding: 1rem 1.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            font-size: 0.95rem;
+            border-bottom: 3px solid transparent;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .tab:hover {
+            color: #163E8C;
+        }
+
+        .tab.active {
+            color: #163E8C;
+            border-bottom-color: #FED600;
+            font-weight: 600;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Settings Card */
+        .settings-card {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+        }
+
+        .settings-card h3 {
+            color: #163E8C;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #163E8C;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 0.25rem;
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        /* Toggle Switch */
+        .toggle-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .toggle-group:last-child {
+            border-bottom: none;
+        }
+
+        .toggle-info h4 {
+            color: #163E8C;
+            margin-bottom: 0.25rem;
+        }
+
+        .toggle-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 30px;
+        }
+
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .toggle-slider {
+            background-color: #28a745;
+        }
+
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #163E8C;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0f2d6b;
+        }
+
+        .btn-secondary {
+            background: #FED600;
+            color: #163E8C;
+            font-weight: 600;
+        }
+
+        .btn-secondary:hover {
+            background: #e5c000;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* Alert */
+        .alert {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .alert-info {
+            background: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeeba;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <img src="../sistema_de_eventos/imagenes/logo.png" alt="Logo EMI">
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><span class="material-symbols-outlined">dashboard</span>DASHBOARD</a></li>
+            <li><a href="gestion-eventos.html"><span class="material-symbols-outlined">event</span>EVENTOS</a></li>
+            <li><a href="gestion-usuarios.html"><span class="material-symbols-outlined">group</span>USUARIOS</a></li>
+            <li><a href="gestion-espacios.html"><span class="material-symbols-outlined">meeting_room</span>ESPACIOS</a></li>
+            <li><a href="reportes.html"><span class="material-symbols-outlined">assessment</span>REPORTES</a></li>
+            <li><a href="configuracion.html" class="active"><span class="material-symbols-outlined">settings</span>CONFIGURACIÓN</a></li>
+            <li><a href="../logout.php"><span class="material-symbols-outlined">logout</span>SALIR</a></li>
+        </ul>
+    </div>
+
+    <!-- Top Header -->
+    <div class="top-header">
+        <h1 class="header-title">Configuración del Sistema</h1>
+        <div class="header-user">
+            <span class="material-symbols-outlined">account_circle</span>
+            <span>Admin</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab active" onclick="switchTab('general')">
+                <span class="material-symbols-outlined">tune</span>
+                General
+            </button>
+            <button class="tab" onclick="switchTab('notificaciones')">
+                <span class="material-symbols-outlined">notifications</span>
+                Notificaciones
+            </button>
+            <button class="tab" onclick="switchTab('usuarios')">
+                <span class="material-symbols-outlined">group</span>
+                Usuarios
+            </button>
+            <button class="tab" onclick="switchTab('seguridad')">
+                <span class="material-symbols-outlined">security</span>
+                Seguridad
+            </button>
+            <button class="tab" onclick="switchTab('avanzado')">
+                <span class="material-symbols-outlined">code</span>
+                Avanzado
+            </button>
+        </div>
+
+        <!-- General Tab -->
+        <div class="tab-content active" id="general">
+            <div class="settings-card">
+                <h3>
+                    <span class="material-symbols-outlined">info</span>
+                    Información del Sistema
+                </h3>
+                <div class="form-group">
+                    <label>Nombre del Sistema</label>
+                    <input type="text" value="SIGEVEN">
+                    <small>Nombre que aparecerá en el sistema</small>
+                </div>
+                <div class="form-group">
+                    <label>Slogan</label>
+                    <input type="text" value="Sistema de Gestión de Eventos Universitarios">
+                </div>
+                <div class="form-group">
+                    <label>Logo del Sistema</label>
+                    <input type="file" accept="image/*">
+                    <small>Formato recomendado: PNG transparente, tamaño máximo 2MB</small>
+                </div>
+                <div class="form-group">
+                    <label>Email de Contacto</label>
+                    <input type="email" value="contacto@emi.edu.bo">
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="tel" value="+591 2 1234567">
+                </div>
+            </div>
+
+            <div class="settings-card">
+                <h3>
+                    <span class="material-symbols-outlined">language</span>
+                    Regionalización
+                </h3>
+                <div class="form-group">
+                    <label>Zona Horaria</label>
+                    <select>
+                        <option value="America/La_Paz" selected>América/La Paz (GMT-4)</option>
+                        <option value="America/Buenos_Aires">América/Buenos Aires (GMT-3)</option>
+                        <option value="America/Lima">América/Lima (GMT-5)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Idioma</label>
+                    <select>
+                        <option value="es" selected>Español</option>
+                        <option value="en">English</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notificaciones Tab -->
+        <div class="tab-content" id="notificaciones">
+            <div class="settings-card">
+                <h3>
+                    <span class="material-symbols-outlined">notifications</span>
+                    Preferencias de Notificaciones
+                </h3>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <h4>Notificaciones por Email</h4>
+                        <p>Enviar notificaciones importantes por correo electrónico</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <h4>Notificaciones Push</h4>
+                        <p>Mostrar notificaciones en el navegador</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <h4>Notificaciones SMS</h4>
+                        <p>Enviar SMS para eventos críticos</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Usuarios Tab -->
+        <div class="tab-content" id="usuarios">
+            <div class="settings-card">
+                <h3>
+                    <span class="material-symbols-outlined">group</span>
+                    Políticas de Usuario
+                </h3>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <h4>Registro Público</h4>
+                        <p>Permitir registro de usuarios externos</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <h4>Validación de Email</h4>
+                        <p>Requerir validación de correo para nuevos usuarios</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>Límite de Eventos por Usuario</label>
+                    <input type="number" value="10" min="1">
+                    <small>Número máximo de eventos que un usuario puede crear al mes</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Seguridad Tab -->
+        <div class="tab-content" id="seguridad">
+            <div class="alert alert-warning">
+                <span class="material-symbols-outlined">warning</span>
+                Los cambios en esta sección pueden afectar la seguridad del sistema
+            </div>
+            <div class="settings-card">
+                <h3>
+                    <span class="material-symbols-outlined">security</span>
+                    Configuración de Seguridad
+                </h3>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <h4>Autenticación de Dos Factores (2FA)</h4>
+                        <p>Requerir verificación adicional al iniciar sesión</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <label>Tiempo de Sesión (minutos)</label>
+                    <input type="number" value="60" min="15" max="480">
+                    <small>Tiempo de inactividad antes de cerrar sesión automáticamente</small>
+                </div>
+                <div class="form-group">
+                    <label>Longitud Mínima de Contraseña</label>
+                    <input type="number" value="8" min="6" max="20">
+                </div>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <h4>Requerir Caracteres Especiales</h4>
+                        <p>Las contraseñas deben incluir caracteres especiales</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Avanzado Tab -->
+        <div class="tab-content" id="avanzado">
+            <div class="alert alert-warning">
+                <span class="material-symbols-outlined">warning</span>
+                Esta sección es para administradores avanzados
+            </div>
+            <div class="settings-card">
+                <h3>
+                    <span class="material-symbols-outlined">code</span>
+                    Configuración Avanzada
+                </h3>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <h4>Modo Mantenimiento</h4>
+                        <p>Desactivar temporalmente el acceso al sistema</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <h4>Logs del Sistema</h4>
+                        <p>Registrar todas las acciones en el sistema</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="toggle-group">
+                    <div class="toggle-info">
+                        <h4>Cache</h4>
+                        <p>Activar caché para mejorar el rendimiento</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="actions">
+                    <button class="btn btn-danger">
+                        <span class="material-symbols-outlined">delete_forever</span>
+                        Limpiar Caché
+                    </button>
+                    <button class="btn btn-danger">
+                        <span class="material-symbols-outlined">download</span>
+                        Descargar Logs
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Save Actions -->
+        <div class="actions">
+            <button class="btn btn-primary">
+                <span class="material-symbols-outlined">save</span>
+                Guardar Cambios
+            </button>
+            <button class="btn btn-secondary">
+                <span class="material-symbols-outlined">refresh</span>
+                Restablecer
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function switchTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => content.classList.remove('active'));
+
+            // Deactivate all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Show selected tab content
+            document.getElementById(tabName).classList.add('active');
+
+            // Activate selected tab
+            event.target.closest('.tab').classList.add('active');
+        }
+    </script>
+</body>
+</html>

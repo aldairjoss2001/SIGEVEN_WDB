@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solicitud Enviada - Sistema de Eventos</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/EventoCreado.css" /> <!-- Cambiado a EventoCreado.css -->
+</head>
+<body>
+  <!-- Header/Navigation -->
+  <header class="header">
+    <nav class="nav">
+      <div class="nav-brand"><h2>Eventos EMI</h2></div>
+      <div class="nav-search">
+        <input type="text" placeholder="Buscar eventos..." class="search-input">
+      </div>
+      <div class="nav-icons">
+        <a href="PerfilDocente.html" class="nav-icon">VOLVER AL PERFIL</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Main Content -->
+  <main class="create-event-container">
+    <div class="confirmation-message">
+      <div class="confirmation-icon">✅</div>
+      <h1>¡Solicitud de Evento Enviada!</h1>
+      <p class="confirmation-subtitle">Su evento ha sido recibido y está en proceso de revisión</p>
+      
+      <div class="confirmation-details">
+        <div class="detail-card">
+          <h3>Próximos Pasos</h3>
+          <ul>
+            <li><strong>Revisión administrativa:</strong> 2-5 días hábiles</li>
+            <li><strong>Validación documental:</strong> Verificación de cartas y permisos</li>
+            <li><strong>Contacto:</strong> Podrían comunicarse con usted para confirmar detalles</li>
+            <li><strong>Aprobación final:</strong> Notificación por correo electrónico</li>
+          </ul>
+        </div>
+        
+        <div class="detail-card">
+          <h3>Información del Evento</h3>
+          <div class="event-preview">
+            <div class="preview-item">
+              <span class="preview-label">Título:</span>
+              <span id="preview-title" class="preview-value">VII Versión CTF EMI 2025</span>
+            </div>
+            <div class="preview-item">
+              <span class="preview-label">Fecha solicitada:</span>
+              <span id="preview-date" class="preview-value">10 de Octubre 2025</span>
+            </div>
+            <div class="preview-item">
+              <span class="preview-label">Código de seguimiento:</span>
+              <span class="preview-value code">EV-2025-0085</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-info">
+        <strong>Estado actual:</strong> Pendiente de revisión administrativa. 
+        Recibirá una notificación cuando su evento sea aprobado o si se requiere información adicional.
+      </div>
+
+      <div class="confirmation-actions">
+        <a href="PerfilDocente.html" class="btn btn-primary">Volver al Perfil</a>
+        <button class="btn btn-text" onclick="window.print()">📄 Imprimir Comprobante</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p style="color: #fed600">© 2025 Sistema de Gestión de Eventos Universitarios. Todos los derechos reservados.</p>
+  </footer>
+
+  <script>
+    // Cargar datos del evento desde localStorage o URL parameters
+    document.addEventListener('DOMContentLoaded', function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const status = urlParams.get('status');
+      
+      if (status === 'success') {
+        // Aquí podrías cargar los datos reales del evento
+        const eventData = JSON.parse(localStorage.getItem('lastEvent') || '{}');
+        
+        if (eventData.title) {
+          document.getElementById('preview-title').textContent = eventData.title;
+        }
+        if (eventData.date) {
+          document.getElementById('preview-date').textContent = new Date(eventData.date).toLocaleDateString('es-ES');
+        }
+      }
+    });
+  </script>
+</body>
+</html>

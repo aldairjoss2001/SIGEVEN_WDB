@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistema de Gestión de Eventos - Acceso para alumnos y docentes, información institucional y servicios.">
+    <title>Sistema de Gestión de Eventos</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <a class="skip-link" href="#main">Saltar al contenido</a>
+    <header>
+        <div class="header-inner">
+            
+            <img src="assets/icons/mobile.png" alt="logo" class="logo">
+            
+            <nav class="main-nav" aria-label="Menú principal">
+                <ul class="main-menu">
+                    <li>
+                        <a href="#">ACADÉMICA</a>
+                        <ul class="submenu">
+                            <li><a href="#">Unidades académicas</a></li>
+                            <li><a href="#">Admisión</a></li>
+                            <li><a href="#">Técnico Superior</a></li>
+                            <li><a href="#">Licenciatura</a></li>
+                            <li><a href="#">Postgrado</a></li>
+                            <li><a href="#">Becas y Descuento</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">INVESTIGACIÓN</a>
+                        <ul class="submenu">
+                            <li><a href="#">Revista científica</a></li>
+                            <li><a href="#">Centro de Investigación</a></li>
+                            <li><a href="#">Laboratorios</a></li>
+                            <li><a href="#">Publicaciones</a></li>
+                            <li><a href="#">Proyectos</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">INTERACCIÓN SOCIAL</a>
+                        <ul class="submenu">
+                            <li><a href="#">Extensión Universitaria</a></li>
+                            <li><a href="#">Responsabilidad Social</a></li>
+                            <li><a href="#">Educación Continua</a></li>
+                            <li><a href="#">Convenios</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">SERVICIOS</a>
+                        <ul class="submenu">
+                            <li><a href="#">Bolsa de Trabajo</a></li>
+                            <li><a href="#">Centro de Idiomas</a></li>
+                            <li><a href="#">Tienda Universitaria</a></li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#">NOSOTROS</a>
+                        <ul class="submenu">
+                            <li><a href="#">Historia</a></li>
+                            <li><a href="#">Misión y Visión</a></li>
+                            <li><a href="#">Autoridades</a></li>
+                            <li><a href="#">Contacto</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            
+            <nav class="redes" aria-label="Redes sociales">
+                <ul>
+                    <li><a class="social-link" href="#" aria-label="Facebook"><img src="assets/icons/facebook.png" alt="Facebook"></a></li>
+                    <li><a class="social-link" href="#" aria-label="Twitter"><img src="assets/icons/gorjeo.png" alt="Twitter"></a></li>
+                    <li><a class="social-link" href="#" aria-label="YouTube"><img src="assets/icons/youtube.png" alt="YouTube"></a></li>
+                    <li><a class="social-link" href="#" aria-label="LinkedIn"><img src="assets/icons/linkedin.png" alt="LinkedIn"></a></li>
+                    <li><a class="social-link" href="#" aria-label="Instagram"><img src="assets/icons/instagram.png" alt="Instagram"></a></li>
+                    <li><a class="social-link" href="#" aria-label="TikTok"><img src="assets/icons/tik-tok.png" alt="TikTok"></a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <div id="main" class="tarjeta">
+            <h1>Bienvenido al Sistema de Gestión de Eventos</h1>
+            <p>Por favor, seleccione una de las siguientes opciones:</p>
+            <div class="btn-row">
+                <button type="button" class="primary-btn" onclick="location.href='loginDocente.php'">Docente</button>
+                <button type="button" class="primary-btn" onclick="location.href='loginEstudiante.php'">Estudiante</button>
+            </div>
+            <div class="btn-row" style="margin-top: 20px;">
+                <button type="button" class="secondary-btn" onclick="location.href='registro.php'" style="background-color: #fff; color: #333; border: 2px solid #fed600;">Registrarse</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p style="color: #FED600;">© 2025 Sistema de Gestión de Eventos. Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Espacios - SIGEVEN Admin</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #163E8C;
+            padding: 2rem 0;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .sidebar-logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 0 1rem;
+        }
+
+        .sidebar-logo img {
+            max-width: 150px;
+            height: auto;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+        }
+
+        .sidebar-menu li {
+            margin: 0.5rem 0;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-menu a:hover {
+            background: rgba(254, 214, 0, 0.15);
+        }
+
+        .sidebar-menu a.active {
+            background: #FED600;
+            color: #163E8C;
+            font-weight: 600;
+        }
+
+        .sidebar-menu .material-symbols-outlined {
+            margin-right: 0.75rem;
+            font-size: 24px;
+        }
+
+        /* Top Header */
+        .top-header {
+            position: fixed;
+            left: 250px;
+            top: 0;
+            right: 0;
+            height: 60px;
+            background: white;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            z-index: 999;
+        }
+
+        .header-title {
+            font-size: 1.5rem;
+            color: #163E8C;
+            font-weight: 600;
+        }
+
+        .header-user {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 250px;
+            margin-top: 60px;
+            padding: 2rem;
+            min-height: calc(100vh - 60px);
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 1rem;
+            flex: 1;
+            max-width: 500px;
+        }
+
+        .search-box input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: #163E8C;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #0f2d6b;
+        }
+
+        .btn-secondary {
+            background: #FED600;
+            color: #163E8C;
+            font-weight: 600;
+        }
+
+        .btn-secondary:hover {
+            background: #e5c000;
+        }
+
+        /* Spaces Grid */
+        .spaces-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .space-card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .space-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .space-card-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .space-card-title {
+            font-size: 1.25rem;
+            color: #163E8C;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .space-card-subtitle {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .space-card-body {
+            padding: 1.5rem;
+        }
+
+        .space-info {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .space-info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .space-info-item .material-symbols-outlined {
+            font-size: 20px;
+            color: #163E8C;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .badge-disponible {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .badge-ocupado {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .badge-mantenimiento {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .space-card-actions {
+            display: flex;
+            gap: 0.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-icon {
+            padding: 0.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s ease;
+        }
+
+        .btn-icon:hover {
+            color: #163E8C;
+        }
+
+        .btn-icon.danger:hover {
+            color: #dc3545;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 8px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            color: #163E8C;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #163E8C;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid #eee;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+
+        .btn-cancel {
+            background: #6c757d;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-logo">
+            <img src="../sistema_de_eventos/imagenes/logo.png" alt="Logo EMI">
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="index.html"><span class="material-symbols-outlined">dashboard</span>DASHBOARD</a></li>
+            <li><a href="gestion-eventos.html"><span class="material-symbols-outlined">event</span>EVENTOS</a></li>
+            <li><a href="gestion-usuarios.html"><span class="material-symbols-outlined">group</span>USUARIOS</a></li>
+            <li><a href="gestion-espacios.html" class="active"><span class="material-symbols-outlined">meeting_room</span>ESPACIOS</a></li>
+            <li><a href="reportes.html"><span class="material-symbols-outlined">assessment</span>REPORTES</a></li>
+            <li><a href="configuracion.html"><span class="material-symbols-outlined">settings</span>CONFIGURACIÓN</a></li>
+            <li><a href="../logout.php"><span class="material-symbols-outlined">logout</span>SALIR</a></li>
+        </ul>
+    </div>
+
+    <!-- Top Header -->
+    <div class="top-header">
+        <h1 class="header-title">Gestión de Espacios</h1>
+        <div class="header-user">
+            <span class="material-symbols-outlined">account_circle</span>
+            <span>Admin</span>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Controls -->
+        <div class="controls">
+            <div class="search-box">
+                <input type="text" placeholder="Buscar espacios..." id="searchInput">
+                <button class="btn btn-primary">
+                    <span class="material-symbols-outlined">search</span>
+                    Buscar
+                </button>
+            </div>
+            <button class="btn btn-secondary" onclick="openModal()">
+                <span class="material-symbols-outlined">add_circle</span>
+                Nuevo Espacio
+            </button>
+        </div>
+
+        <!-- Spaces Grid -->
+        <div class="spaces-grid">
+            <!-- Space Card 1 -->
+            <div class="space-card">
+                <div class="space-card-header">
+                    <div class="space-card-title">
+                        <span class="material-symbols-outlined">meeting_room</span>
+                        Auditorio Principal
+                    </div>
+                    <div class="space-card-subtitle">Auditorios</div>
+                </div>
+                <div class="space-card-body">
+                    <div class="space-info">
+                        <div class="space-info-item">
+                            <span class="material-symbols-outlined">chair</span>
+                            <span>Capacidad: 500 personas</span>
+                        </div>
+                        <div class="space-info-item">
+                            <span class="material-symbols-outlined">location_on</span>
+                            <span>Edificio A - Planta Baja</span>
+                        </div>
+                        <div class="space-info-item">
+                            <span class="material-symbols-outlined">devices</span>
+                            <span>Proyector, Sonido, Aire acondicionado</span>
+                        </div>
+                    </div>
+                    <span class="badge badge-disponible">Disponible</span>
+                    <div class="space-card-actions">
+                        <button class="btn-icon" title="Ver calendario">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                        </button>
+                        <button class="btn-icon" title="Editar">
+                            <span class="material-symbols-outlined">edit</span>
+                        </button>
+                        <button class="btn-icon danger" title="Eliminar">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Space Card 2 -->
+            <div class="space-card">
+                <div class="space-card-header">
+                    <div class="space-card-title">
+                        <span class="material-symbols-outlined">meeting_room</span>
+                        Sala de Conferencias 1
+                    </div>
+                    <div class="space-card-subtitle">Salas de Reuniones</div>
+                </div>
+                <div class="space-card-body">
+                    <div class="space-info">
+                        <div class="space-info-item">
+                            <span class="material-symbols-outlined">chair</span>
+                            <span>Capacidad: 30 personas</span>
+                        </div>
+                        <div class="space-info-item">
+                            <span class="material-symbols-outlined">location_on</span>
+                            <span>Edificio B - Piso 2</span>
+                        </div>
+                        <div class="space-info-item">
+                            <span class="material-symbols-outlined">devices</span>
+                            <span>TV, Video conferencia</span>
+                        </div>
+                    </div>
+                    <span class="badge badge-ocupado">Ocupado</span>
+                    <div class="space-card-actions">
+                        <button class="btn-icon" title="Ver calendario">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                        </button>
+                        <button class="btn-icon" title="Editar">
+                            <span class="material-symbols-outlined">edit</span>
+                        </button>
+                        <button class="btn-icon danger" title="Eliminar">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Space Card 3 -->
+            <div class="space-card">
+                <div class="space-card-header">
+                    <div class="space-card-title">
+                        <span class="material-symbols-outlined">meeting_room</span>
+                        Laboratorio de Cómputo
+                    </div>
+                    <div class="space-card-subtitle">Laboratorios</div>
+                </div>
+                <div class="space-card-body">
+                    <div class="space-info">
+                        <div class="space-info-item">
+                            <span class="material-symbols-outlined">chair</span>
+                            <span>Capacidad: 40 personas</span>
+                        </div>
+                        <div class="space-info-item">
+                            <span class="material-symbols-outlined">location_on</span>
+                            <span>Edificio C - Piso 3</span>
+                        </div>
+                        <div class="space-info-item">
+                            <span class="material-symbols-outlined">devices</span>
+                            <span>40 computadoras, Proyector</span>
+                        </div>
+                    </div>
+                    <span class="badge badge-mantenimiento">Mantenimiento</span>
+                    <div class="space-card-actions">
+                        <button class="btn-icon" title="Ver calendario">
+                            <span class="material-symbols-outlined">calendar_today</span>
+                        </button>
+                        <button class="btn-icon" title="Editar">
+                            <span class="material-symbols-outlined">edit</span>
+                        </button>
+                        <button class="btn-icon danger" title="Eliminar">
+                            <span class="material-symbols-outlined">delete</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Nuevo/Editar Espacio -->
+    <div class="modal" id="spaceModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Nuevo Espacio</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label>Nombre del Espacio *</label>
+                        <input type="text" required placeholder="Ej: Auditorio Principal">
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo *</label>
+                        <select required>
+                            <option value="">Seleccione...</option>
+                            <option value="auditorio">Auditorio</option>
+                            <option value="sala">Sala de Reuniones</option>
+                            <option value="laboratorio">Laboratorio</option>
+                            <option value="aula">Aula</option>
+                            <option value="otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Capacidad *</label>
+                        <input type="number" required placeholder="Número de personas">
+                    </div>
+                    <div class="form-group">
+                        <label>Ubicación *</label>
+                        <input type="text" required placeholder="Ej: Edificio A - Planta Baja">
+                    </div>
+                    <div class="form-group">
+                        <label>Equipamiento</label>
+                        <textarea placeholder="Describe el equipamiento disponible..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Estado *</label>
+                        <select required>
+                            <option value="disponible">Disponible</option>
+                            <option value="ocupado">Ocupado</option>
+                            <option value="mantenimiento">Mantenimiento</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-cancel" onclick="closeModal()">Cancelar</button>
+                <button class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openModal() {
+            document.getElementById('spaceModal').classList.add('show');
+        }
+
+        function closeModal() {
+            document.getElementById('spaceModal').classList.remove('show');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('spaceModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

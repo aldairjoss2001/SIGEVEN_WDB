@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perfil Docente - Sistema de Eventos</title>
+    <link rel="stylesheet" href="css/styles.css" />
+    <link rel="stylesheet" href="css/PerfilDocente.css" />
+    <!-- Material Icons -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+  </head>
+  <body>
+  <!-- Vertical Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="assets/icons/logo.png" alt="Logo EMI" class="logo-img">
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-item active">
+        <span class="material-symbols-outlined">home</span>
+        <span class="sidebar-text">INICIO</span>
+      </a>
+      <a href="NuevoEvento.html" class="sidebar-item">
+        <span class="material-symbols-outlined">add_circle</span>
+        <span class="sidebar-text">NUEVO EVENTO</span>
+      </a>
+      <a href="Solicitudes.html" class="sidebar-item">
+        <span class="material-symbols-outlined">pending_actions</span>
+        <span class="sidebar-text">SOLICITUDES</span>
+      </a>
+      <a href="calendarioDocentes.html" class="sidebar-item">
+        <span class="material-symbols-outlined">calendar_month</span>
+        <span class="sidebar-text">CALENDARIO</span>
+      </a>
+      <a href="../logout.php" class="sidebar-item">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="sidebar-text">SALIR</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Top Search Bar -->
+  <header class="top-header">
+    <div class="header-search">
+      <span class="material-symbols-outlined">search</span>
+      <input type="text" placeholder="Buscar eventos..." class="search-input" id="searchInput">
+    </div>
+  </header>
+
+    <!-- Main Content -->
+    <main class="profile-container">
+      <!-- Inputs para tabs (CSS-only) -->
+      <input
+        type="radio"
+        name="profile-tab"
+        id="tab-mis-eventos"
+        checked
+        hidden
+      />
+      <input type="radio" name="profile-tab" id="tab-solicitudes" hidden />
+      <input type="radio" name="profile-tab" id="tab-espacios" hidden />
+      <input type="radio" name="profile-tab" id="tab-estadisticas" hidden />
+
+      <!-- Profile Header -->
+      <section class="profile-header">
+        <div class="cover-photo">
+          <img
+            src="assets/uploads/portada-docente.jpeg"
+            alt="Cover photo"
+            class="cover-img"
+          />
+          <button class="edit-cover-btn" onclick="simularEdicion('portada')">
+            <span class="material-symbols-outlined">edit</span>
+          </button>
+        </div>
+
+        <div class="profile-info">
+          <div class="profile-picture">
+            <img
+              src="assets/uploads/avatar-docente.jpeg"
+              alt="Foto perfil"
+              class="profile-img"
+              id="profileImage"
+            />
+            <button class="edit-photo-btn" onclick="simularEdicion('foto')">
+              <span class="material-symbols-outlined">photo_camera</span>
+            </button>
+          </div>
+
+          <div class="profile-details">
+            <h1 class="profile-name" id="teacherName">Dr. Carlos Mendoza</h1>
+            <p class="profile-bio">Docente de Ingeniería de Sistemas</p>
+            <p class="profile-bio">Coordinador de Carrera</p>
+
+            <div class="profile-stats">
+              <div class="stat">
+                <span class="material-symbols-outlined stat-icon">event_available</span>
+                <span class="stat-number" id="eventsCreated">8</span>
+                <span class="stat-label">Eventos creados</span>
+              </div>
+              <div class="stat">
+                <span class="material-symbols-outlined stat-icon">pending</span>
+                <span class="stat-number" id="eventsOngoing">3</span>
+                <span class="stat-label">En curso</span>
+              </div>
+              <div class="stat">
+                <span class="material-symbols-outlined stat-icon">group</span>
+                <span class="stat-number" id="totalAttendees">245</span>
+                <span class="stat-label">Total asistentes</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-actions">
+            <a
+              class="btn btn-primary"
+              id="btn-nuevo-evento"
+              href="NuevoEvento.html"
+            >
+              <span class="material-symbols-outlined">add_circle</span>
+              Nuevo Evento
+            </a>
+            <button class="btn btn-outline" onclick="editarPerfil()">
+              <span class="material-symbols-outlined">edit</span>
+              Editar Perfil
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Navigation Tabs -->
+      <section class="profile-tabs">
+        <div class="tabs">
+          <label
+            for="tab-mis-eventos"
+            class="tab"
+            role="tab"
+            aria-controls="mis-eventos"
+            ><span class="material-symbols-outlined">event</span> Mis Eventos</label
+          >
+          <label
+            for="tab-solicitudes"
+            class="tab"
+            role="tab"
+            aria-controls="solicitudes"
+          >
+            <span class="material-symbols-outlined">pending_actions</span>
+            Solicitudes
+          </label>
+          <label
+            for="tab-espacios"
+            class="tab"
+            role="tab"
+            aria-controls="espacios"
+          >
+            <span class="material-symbols-outlined">meeting_room</span>
+            Espacios
+          </label>
+          <label
+            for="tab-estadisticas"
+            class="tab"
+            role="tab"
+            aria-controls="estadisticas"
+          >
+            <span class="material-symbols-outlined">analytics</span>
+            Estadísticas
+          </label>
+        </div>
+      </section>
+
+      <!-- Content Area -->
+      <section class="profile-content">
+        <!-- ========== Mis Eventos (TAB) ========== -->
+        <div class="tab-content" id="mis-eventos">
+          <div class="section-header">
+            <h2>Eventos Creados</h2>
+            <p>Gestiona tus actividades y eventos</p>
+          </div>
+
+          <div class="events-feed" id="teacherEvents">
+            <!-- Los eventos se cargan dinámicamente -->
+          </div>
+        </div>
+
+        <!-- ========== Solicitudes (TAB) ========== -->
+        <div class="tab-content" id="solicitudes">
+          <div class="section-header">
+            <h2>Solicitudes de Espacios</h2>
+            <p>Gestiona tus reservas de espacios universitarios</p>
+          </div>
+
+          <div class="requests-grid" id="requestsGrid">
+            <!-- Las solicitudes se cargan dinámicamente -->
+          </div>
+        </div>
+
+        <!-- ========== Espacios (TAB) ========== -->
+        <div class="tab-content" id="espacios">
+          <div class="section-header">
+            <h2>Espacios Disponibles</h2>
+            <p>Consulta la disponibilidad de espacios universitarios</p>
+          </div>
+
+          <div class="spaces-grid" id="spacesGrid">
+            <!-- Los espacios se cargan dinámicamente -->
+          </div>
+        </div>
+
+        <!-- ========== Estadísticas (TAB) ========== -->
+        <div class="tab-content" id="estadisticas">
+          <div class="section-header">
+            <h2>Estadísticas de Eventos</h2>
+            <p>Métricas y análisis de tus actividades</p>
+          </div>
+
+          <div class="stats-grid">
+            <div class="stat-card">
+              <h3>Total de Participantes</h3>
+              <div class="stat-number large">245</div>
+              <p>Estudiantes en todos tus eventos</p>
+            </div>
+
+            <div class="stat-card">
+              <h3>Índice de Ocupación</h3>
+              <div class="stat-number large">78%</div>
+              <p>Promedio de asistencia</p>
+            </div>
+
+            <div class="stat-card">
+              <h3>Eventos Realizados</h3>
+              <div class="stat-number large">8</div>
+              <p>Actividades completadas</p>
+            </div>
+
+            <div class="stat-card">
+              <h3>Satisfacción</h3>
+              <div class="stat-number large">4.5/5</div>
+              <p>Calificación promedio</p>
+            </div>
+          </div>
+
+          <div class="charts-section">
+            <h3>Asistencia por Evento</h3>
+            <div
+              class="chart-placeholder"
+              style="background: transparent; border: none; padding: 0"
+            >
+              <div
+                class="bar-chart"
+                style="
+                  display: flex;
+                  align-items: flex-end;
+                  gap: 18px;
+                  height: 220px;
+                  padding: 24px 0 8px 0;
+                "
+              >
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    flex: 1;
+                  "
+                >
+                  <div
+                    style="
+                      height: 52px;
+                      width: 38px;
+                      background: #166534;
+                      border-radius: 8px 8px 0 0;
+                      margin-bottom: 6px;
+                      display: flex;
+                      align-items: flex-end;
+                      justify-content: center;
+                      color: white;
+                      font-size: 0.95rem;
+                      font-weight: 700;
+                    "
+                  >
+                    52
+                  </div>
+                  <span
+                    style="font-size: 0.85rem; color: #374151; margin-top: 4px"
+                    >CTF EMI</span
+                  >
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    flex: 1;
+                  "
+                >
+                  <div
+                    style="
+                      height: 42px;
+                      width: 38px;
+                      background: #2563eb;
+                      border-radius: 8px 8px 0 0;
+                      margin-bottom: 6px;
+                      display: flex;
+                      align-items: flex-end;
+                      justify-content: center;
+                      color: white;
+                      font-size: 0.95rem;
+                      font-weight: 700;
+                    "
+                  >
+                    42
+                  </div>
+                  <span
+                    style="font-size: 0.85rem; color: #374151; margin-top: 4px"
+                    >Arborización</span
+                  >
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    flex: 1;
+                  "
+                >
+                  <div
+                    style="
+                      height: 156px;
+                      width: 38px;
+                      background: #eab308;
+                      border-radius: 8px 8px 0 0;
+                      margin-bottom: 6px;
+                      display: flex;
+                      align-items: flex-end;
+                      justify-content: center;
+                      color: #333;
+                      font-size: 0.95rem;
+                      font-weight: 700;
+                    "
+                  >
+                    156
+                  </div>
+                  <span
+                    style="font-size: 0.85rem; color: #374151; margin-top: 4px"
+                    >DEEPTECH</span
+                  >
+                </div>
+                <div
+                  style="
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    flex: 1;
+                  "
+                >
+                  <div
+                    style="
+                      height: 70px;
+                      width: 38px;
+                      background: #ef4444;
+                      border-radius: 8px 8px 0 0;
+                      margin-bottom: 6px;
+                      display: flex;
+                      align-items: flex-end;
+                      justify-content: center;
+                      color: white;
+                      font-size: 0.95rem;
+                      font-weight: 700;
+                    "
+                  >
+                    70
+                  </div>
+                  <span
+                    style="font-size: 0.85rem; color: #374151; margin-top: 4px"
+                    >Taller Redes</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <!-- /.profile-content -->
+    </main>
+
+    <!-- Footer -->
+    <footer>
+      <p style="color: #fed600">
+        © 2025 Sistema de Gestión de Eventos Universitarios. Todos los derechos
+        reservados.
+      </p>
+    </footer>
+
+    <!-- Modal para acciones -->
+    <div id="actionModal" class="modal">
+      <div class="modal-content">
+        <span class="close-modal" onclick="cerrarModal()">&times;</span>
+        <div id="modalContent"></div>
+      </div>
+    </div>
+
+    <!-- Notificación Toast -->
+    <div id="toast" class="toast"></div>
+
+    <script>
+      // ========== DATOS SIMULADOS ==========
+      const teacherData = {
+        name: "Dr. Carlos Mendoza",
+        department: "Ingeniería de Sistemas",
+        role: "Coordinador de Carrera",
+        stats: {
+          eventsCreated: 8,
+          eventsOngoing: 3,
+          totalAttendees: 245,
+          satisfaction: 4.5,
+        },
+      };
+
+      const teacherEvents = {
+        1: {
+          id: 1,
+          title: "VII VERSIÓN CTF EMI 2025",
+          type: "ongoing",
+          image: "ctf.jpeg",
+          date: "10 - 11 Oct 2025 - 18:00",
+          location: "Laboratorios de Computación - Bloque A",
+          description:
+            "Sexta versión de desafío captura la bandera para estudiantes de sistemas.",
+          status: "approved",
+          stats: {
+            enrolled: 45,
+            capacity: 80,
+            occupancy: 85,
+            waitlist: 12,
+          },
+        },
+        2: {
+          id: 2,
+          title: "Campaña de Arborización",
+          type: "upcoming",
+          image: "arborizacion.jpeg",
+          date: "15 Nov 2025 - 08:00",
+          location: "Playón Irpavi",
+          description: "Actividad de responsabilidad social universitaria.",
+          status: "pending",
+          stats: {
+            enrolled: 28,
+            capacity: 50,
+            occupancy: 56,
+          },
+        },
+        3: {
+          id: 3,
+          title: "Congreso Interuniversitario DEEPTECH",
+          type: "completed",
+          image: "deeptech.jpeg",
+          date: "08 - 09 Sep 2024",
+          location: "Auditorio EMI, Irpavi",
+          description: "Congreso de tecnología e innovación para estudiantes.",
+          status: "completed",
+          stats: {
+            totalAttendees: 156,
+            satisfaction: 92,
+          },
+        },
+      };
+
+      const spaceRequests = [
+        {
+          id: 1,
+          space: "Sala de Conferencias - Bloque B",
+          status: "approved",
+          date: "20 Oct 2025",
+          time: "14:00 - 17:00",
+          activity: "Reunión de coordinación",
+          capacity: "30 personas",
+        },
+        {
+          id: 2,
+          space: "Laboratorio de Computación A-201",
+          status: "pending",
+          date: "25 Oct 2025",
+          time: "08:00 - 12:00",
+          activity: "Taller de programación",
+          capacity: "25 computadoras",
+        },
+      ];
+
+      const availableSpaces = [
+        {
+          id: 1,
+          name: "Auditorio Principal",
+          capacity: "200 personas",
+          equipment: "Proyector, Sonido, Aire acondicionado",
+          availability: "available",
+        },
+        {
+          id: 2,
+          name: "Salón de Honor",
+          capacity: "100 personas",
+          equipment: "Proyector, Sonido, Podio",
+          availability: "available",
+        },
+        {
+          id: 3,
+          name: "Cancha de Césped Sintético",
+          capacity: "22 personas (fútbol)",
+          equipment: "Iluminación, Bancas",
+          availability: "limited",
+        },
+        {
+          id: 4,
+          name: "Parrillero",
+          capacity: "40 personas",
+          equipment: "Parrillas, Mesas, Sillas",
+          availability: "available",
+        },
+        {
+          id: 5,
+          name: "Laboratorio de Computación A-201",
+          capacity: "25 computadoras",
+          equipment: "PCs, Proyector, Red",
+          availability: "limited",
+        },
+      ];
+
+      // ========== INICIALIZACIÓN ==========
+      document.addEventListener("DOMContentLoaded", function () {
+        inicializarPerfil();
+        cargarEventosDocente();
+        cargarSolicitudes();
+        cargarEspacios();
+        cargarEstadisticas();
+        configurarBusqueda();
+      });
+
+      // ========== FUNCIONES PRINCIPALES ==========
+
+      function inicializarPerfil() {
+        document.getElementById("teacherName").textContent = teacherData.name;
+        document.getElementById("eventsCreated").textContent =
+          teacherData.stats.eventsCreated;
+        document.getElementById("eventsOngoing").textContent =
+          teacherData.stats.eventsOngoing;
+        document.getElementById("totalAttendees").textContent =
+          teacherData.stats.totalAttendees;
+      }
+
+      function cargarEventosDocente() {
+        const container = document.getElementById("teacherEvents");
+        if (!container) return;
+
+        container.innerHTML = Object.values(teacherEvents)
+          .map(
+            (event) => `
+        <article class="event-card" data-event-id="${event.id}">
+          <div class="event-header">
+            <img src="assets/images/${
+              event.image
+            }" alt="Event image" class="event-cover">
+            <div class="event-badge ${
+              event.type === "ongoing"
+                ? "ongoing"
+                : event.type === "completed"
+                ? "past"
+                : ""
+            }">
+              ${
+                event.type === "ongoing"
+                  ? "En Curso"
+                  : event.type === "completed"
+                  ? "Finalizado"
+                  : "Próximo"
+              }
+            </div>
+          </div>
+          <div class="event-content">
+            <div class="event-admin-header">
+              <h3 class="event-title">${event.title}</h3>
+              <div class="event-actions-admin">
+                ${
+                  event.status !== "completed"
+                    ? `
+                  <button class="btn btn-sm btn-edit" onclick="editarEvento(${
+                    event.id
+                  })"><span class="material-symbols-outlined">edit</span> Editar</button>
+                  <button class="btn btn-sm btn-manage" onclick="gestionarEvento(${
+                    event.id
+                  })"><span class="material-symbols-outlined">group</span> Gestionar</button>
+                  ${
+                    event.status !== "pending"
+                      ? `<button class="btn btn-sm btn-danger" onclick="eliminarEvento(${event.id})">  <span class="material-symbols-outlined">delete</span> Eliminar</button>`
+                      : ""
+                  }
+                `
+                    : `
+                  <button class="btn btn-sm btn-outline" onclick="verEstadisticas(${event.id})">📊 Estadísticas</button>
+                  <button class="btn btn-sm btn-primary" onclick="gestionarCertificados(${event.id})">📄 Certificados</button>
+                `
+                }
+              </div>
+            </div>
+            <div class="event-meta">
+              <span class="event-date"><span class="material-symbols-outlined">event</span> ${event.date}</span>
+              <span class="event-location"><span class="material-symbols-outlined">location_on</span> ${event.location}</span>
+              <span class="event-status">Estado: <strong>${getStatusText(
+                event.status
+              )}</strong></span>
+            </div>
+            <p class="event-description">${event.description}</p>
+            <div class="event-stats-admin">
+              ${
+                event.stats.enrolled
+                  ? `
+                <div class="stat-admin">
+                  <span class="stat-number">${event.stats.enrolled}/${
+                      event.stats.capacity
+                    }</span>
+                  <span class="stat-label">Inscritos</span>
+                </div>
+                <div class="stat-admin">
+                  <span class="stat-number">${event.stats.occupancy}%</span>
+                  <span class="stat-label">Ocupación</span>
+                </div>
+                ${
+                  event.stats.waitlist
+                    ? `
+                  <div class="stat-admin">
+                    <span class="stat-number">${event.stats.waitlist}</span>
+                    <span class="stat-label">En lista de espera</span>
+                  </div>
+                `
+                    : ""
+                }
+              `
+                  : `
+                <div class="stat-admin">
+                  <span class="stat-number">${event.stats.totalAttendees}</span>
+                  <span class="stat-label">Asistentes totales</span>
+                </div>
+                <div class="stat-admin">
+                  <span class="stat-number">${event.stats.satisfaction}%</span>
+                  <span class="stat-label">Satisfacción</span>
+                </div>
+              `
+              }
+            </div>
+            <div class="event-actions">
+              ${
+                event.status === "pending"
+                  ? `
+                <button class="btn btn-outline" onclick="contactarAdministracion(${event.id})">Contactar Administración</button>
+              `
+                  : event.status === "completed"
+                  ? `
+                <button class="btn btn-primary" onclick="generarReporteFinal(${event.id})">Generar Reporte Final</button>
+                <button class="btn btn-outline" onclick="descargarListaAsistencia(${event.id})">Descargar Lista de Asistencia</button>
+              `
+                  : `
+                <button class="btn btn-primary" onclick="verInscritos(${event.id})">Ver Inscritos</button>
+                <button class="btn btn-outline" onclick="generarReporte(${event.id})">Generar Reporte</button>
+                <button class="btn btn-text" onclick="compartirEvento(${event.id})">  <span class="material-symbols-outlined">share</span> Compartir</button>
+              `
+              }
+            </div>
+          </div>
+        </article>
+      `
+          )
+          .join("");
+      }
+
+      function cargarSolicitudes() {
+        const container = document.getElementById("requestsGrid");
+        if (!container) return;
+
+        const requestsHTML = spaceRequests
+          .map(
+            (request) => `
+        <div class="request-card ${request.status}">
+          <div class="request-header">
+            <h3>${request.space}</h3>
+            <span class="request-badge ${request.status}">
+              ${request.status === "approved" ? "Aprobado" : "Pendiente"}
+            </span>
+          </div>
+          <div class="request-details">
+            <p><strong>Fecha:</strong> ${request.date}</p>
+            <p><strong>Horario:</strong> ${request.time}</p>
+            <p><strong>Actividad:</strong> ${request.activity}</p>
+            <p><strong>Capacidad:</strong> ${request.capacity}</p>
+          </div>
+          <div class="request-actions">
+            <button class="btn btn-sm btn-outline" onclick="modificarSolicitud(${
+              request.id
+            })">
+              ${request.status === "pending" ? "Editar" : "Modificar"}
+            </button>
+            <button class="btn btn-sm btn-danger" onclick="cancelarSolicitud(${
+              request.id
+            })">
+              Cancelar
+            </button>
+          </div>
+        </div>
+      `
+          )
+          .join("");
+
+        // Agregar tarjeta de nueva solicitud
+        container.innerHTML =
+          requestsHTML +
+          `
+        <div class="request-card new">
+          <div class="request-header">
+            <h3>Nueva Solicitud de Evento</h3>
+            <span class="request-badge new">Nuevo</span>
+          </div>
+          <div class="request-details">
+            <p>Solicita un espacio para tu próximo evento o actividad</p>
+          </div>
+          <div class="request-actions">
+            <button class="btn btn-primary" onclick="nuevaSolicitud()">➕ Nuevo Evento</button>
+          </div>
+        </div>
+      `;
+      }
+
+      function cargarEspacios() {
+        const container = document.getElementById("spacesGrid");
+        if (!container) return;
+
+        container.innerHTML = availableSpaces
+          .map(
+            (space) => `
+        <div class="space-card">
+          <h3>${space.name}</h3>
+          <p>Capacidad: ${space.capacity}</p>
+          <p>Equipamiento: ${space.equipment}</p>
+          <div class="space-availability">
+            <span class="availability-badge ${space.availability}">
+              ${
+                space.availability === "available"
+                  ? "Disponible"
+                  : "Ocupado Parcialmente"
+              }
+            </span>
+          </div>
+          <button class="btn btn-outline btn-block" onclick="consultarHorarios(${
+            space.id
+          })">
+            Consultar Horarios
+          </button>
+        </div>
+      `
+          )
+          .join("");
+      }
+
+      function cargarEstadisticas() {
+        const container = document.getElementById("statsGrid");
+        if (!container) return;
+
+        container.innerHTML = `
+        <div class="stat-card">
+          <h3>Total de Participantes</h3>
+          <div class="stat-number large">${teacherData.stats.totalAttendees}</div>
+          <p>Estudiantes en todos tus eventos</p>
+        </div>
+        <div class="stat-card">
+          <h3>Índice de Ocupación</h3>
+          <div class="stat-number large">78%</div>
+          <p>Promedio de asistencia</p>
+        </div>
+        <div class="stat-card">
+          <h3>Eventos Realizados</h3>
+          <div class="stat-number large">${teacherData.stats.eventsCreated}</div>
+          <p>Actividades completadas</p>
+        </div>
+        <div class="stat-card">
+          <h3>Satisfacción</h3>
+          <div class="stat-number large">${teacherData.stats.satisfaction}/5</div>
+          <p>Calificación promedio</p>
+        </div>
+      `;
+
+        // Actualizar gráfico de asistencia
+        actualizarGraficoAsistencia();
+      }
+
+      // ========== FUNCIONES DE GESTIÓN DE EVENTOS ==========
+
+      function editarEvento(eventId) {
+        const event = teacherEvents[eventId];
+        if (!event) return;
+
+        if (event.status === "approved") {
+          mostrarNotificacion(
+            "⚠️ No puedes editar un evento ya aprobado. Contacta a administración."
+          );
+          return;
+        }
+
+        mostrarModal(`
+        <h3>Editar Evento: ${event.title}</h3>
+        <p>Esta función te permitiría modificar los detalles del evento.</p>
+        <div class="modal-actions">
+          <button class="btn btn-primary" onclick="guardarCambiosEvento(${eventId})">Guardar Cambios</button>
+          <button class="btn btn-outline" onclick="cerrarModal()">Cancelar</button>
+        </div>
+      `);
+      }
+
+      function gestionarEvento(eventId) {
+        const event = teacherEvents[eventId];
+        if (!event) return;
+
+        mostrarModal(`
+        <h3>Gestionar Evento: ${event.title}</h3>
+        <div class="management-options">
+          <button class="btn btn-outline btn-block" onclick="verInscritos(${eventId})"><span class="material-symbols-outlined">group</span> Ver Lista de Inscritos</button>
+          <button class="btn btn-outline btn-block" onclick="enviarRecordatorio(${eventId})">📧 Enviar Recordatorio</button>
+          <button class="btn btn-outline btn-block" onclick="gestionarListaEspera(${eventId})">⏳ Gestionar Lista de Espera</button>
+        </div>
+      `);
+      }
+
+      function eliminarEvento(eventId) {
+        if (
+          confirm(
+            "¿Estás seguro de que deseas eliminar este evento? Esta acción no se puede deshacer."
+          )
+        ) {
+          // Simular eliminación
+          delete teacherEvents[eventId];
+          teacherData.stats.eventsCreated--;
+          document.getElementById("eventsCreated").textContent =
+            teacherData.stats.eventsCreated;
+
+          cargarEventosDocente();
+          mostrarNotificacion("✅ Evento eliminado correctamente");
+        }
+      }
+
+      function verInscritos(eventId) {
+        const event = teacherEvents[eventId];
+        if (!event) return;
+
+        // Simular lista de inscritos
+        const inscritos = [
+          "María Fernandez - Ingeniería de Sistemas",
+          "Juan Pérez - Ingeniería Civil",
+          "Ana García - Ingeniería Industrial",
+          "Carlos López - Ingeniería de Sistemas",
+        ];
+
+        mostrarModal(`
+        <h3>Inscritos en: ${event.title}</h3>
+        <div class="inscritos-list">
+          <h4>Total: ${event.stats.enrolled} inscritos</h4>
+          <ul>
+            ${inscritos.map((inscrito) => `<li>${inscrito}</li>`).join("")}
+          </ul>
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-primary" onclick="exportarListaInscritos(${eventId})">📊 Exportar Lista</button>
+          <button class="btn btn-outline" onclick="cerrarModal()">Cerrar</button>
+        </div>
+      `);
+      }
+
+      function generarReporte(eventId) {
+        mostrarNotificacion("📊 Generando reporte del evento...");
+        setTimeout(() => {
+          mostrarNotificacion("✅ Reporte generado y listo para descargar");
+        }, 2000);
+      }
+
+      // ========== FUNCIONES DE SOLICITUDES ==========
+
+      function modificarSolicitud(requestId) {
+        const request = spaceRequests.find((r) => r.id === requestId);
+        if (!request) return;
+
+        mostrarModal(`
+        <h3>Modificar Solicitud: ${request.space}</h3>
+        <p>Aquí podrías modificar los detalles de tu solicitud de espacio.</p>
+        <div class="modal-actions">
+          <button class="btn btn-primary" onclick="guardarCambiosSolicitud(${requestId})">Guardar Cambios</button>
+          <button class="btn btn-outline" onclick="cerrarModal()">Cancelar</button>
+        </div>
+      `);
+      }
+
+      function cancelarSolicitud(requestId) {
+        if (confirm("¿Estás seguro de que deseas cancelar esta solicitud?")) {
+          const index = spaceRequests.findIndex((r) => r.id === requestId);
+          if (index !== -1) {
+            spaceRequests.splice(index, 1);
+            cargarSolicitudes();
+            mostrarNotificacion("✅ Solicitud cancelada correctamente");
+          }
+        }
+      }
+
+      function nuevaSolicitud() {
+        // Redirigir a la página de nuevo evento
+        window.location.href = "NuevoEvento.html";
+      }
+
+      // ========== FUNCIONES DE ESPACIOS ==========
+
+      function consultarHorarios(spaceId) {
+        const space = availableSpaces.find((s) => s.id === spaceId);
+        if (!space) return;
+
+        // Simular consulta de horarios
+        const horarios = [
+          "Lunes: 08:00 - 12:00 (Disponible)",
+          "Martes: 14:00 - 18:00 (Ocupado)",
+          "Miércoles: 10:00 - 16:00 (Parcialmente disponible)",
+          "Jueves: 08:00 - 12:00 (Disponible)",
+          "Viernes: 14:00 - 20:00 (Ocupado)",
+        ];
+
+        mostrarModal(`
+        <h3>Horarios: ${space.name}</h3>
+        <div class="horarios-list">
+          ${horarios.map((horario) => `<p>${horario}</p>`).join("")}
+        </div>
+        <div class="modal-actions">
+          <button class="btn btn-primary" onclick="solicitarEsteEspacio(${spaceId})">Solicitar este Espacio</button>
+          <button class="btn btn-outline" onclick="cerrarModal()">Cerrar</button>
+        </div>
+      `);
+      }
+
+      // ========== FUNCIONES AUXILIARES ==========
+
+      function getStatusText(status) {
+        const statusMap = {
+          pending: "Pendiente de aprobación",
+          approved: "Aprobado",
+          completed: "Completado",
+        };
+        return statusMap[status] || status;
+      }
+
+      function simularEdicion(tipo) {
+        if (tipo === "foto") {
+          mostrarNotificacion("<span class="material-symbols-outlined">photo_camera</span> Función de edición de foto simulada");
+        } else if (tipo === "portada") {
+          mostrarNotificacion("🎨 Función de edición de portada simulada");
+        }
+      }
+
+      function editarPerfil() {
+        const nuevoNombre = prompt("Editar nombre:", teacherData.name);
+        if (nuevoNombre && nuevoNombre.trim() !== "") {
+          teacherData.name = nuevoNombre.trim();
+          document.getElementById("teacherName").textContent = teacherData.name;
+          mostrarNotificacion("✅ Perfil actualizado correctamente");
+        }
+      }
+
+      function configurarBusqueda() {
+        const searchInput = document.getElementById("searchInput");
+        if (searchInput) {
+          searchInput.addEventListener("input", function (e) {
+            const searchTerm = e.target.value.toLowerCase();
+            filtrarContenido(searchTerm);
+          });
+        }
+      }
+
+      function filtrarContenido(searchTerm) {
+        // Filtrar eventos
+        const eventCards = document.querySelectorAll(".event-card");
+        eventCards.forEach((card) => {
+          const title = card
+            .querySelector(".event-title")
+            .textContent.toLowerCase();
+          const description = card
+            .querySelector(".event-description")
+            .textContent.toLowerCase();
+
+          if (title.includes(searchTerm) || description.includes(searchTerm)) {
+            card.style.display = "flex";
+          } else {
+            card.style.display = "none";
+          }
+        });
+      }
+
+      function actualizarGraficoAsistencia() {
+        const container = document.getElementById("attendanceChart");
+        if (!container) return;
+
+        const eventos = Object.values(teacherEvents);
+        const asistencias = eventos.map(
+          (event) => event.stats.enrolled || event.stats.totalAttendees || 0
+        );
+        const nombres = eventos.map((event) => event.title.split(" ")[0]);
+
+        container.innerHTML = `
+        <div class="bar-chart" style="display:flex; align-items:flex-end; gap:18px; height:220px; padding:24px 0 8px 0;">
+          ${asistencias
+            .map(
+              (asistencia, index) => `
+            <div style="display:flex; flex-direction:column; align-items:center; flex:1;">
+              <div style="height: ${Math.max(
+                30,
+                (asistencia / Math.max(...asistencias)) * 150
+              )}px; 
+                          width:38px; 
+                          background:${
+                            ["#166534", "#2563eb", "#eab308", "#ef4444"][index]
+                          }; 
+                          border-radius:8px 8px 0 0; 
+                          margin-bottom:6px; 
+                          display:flex; 
+                          align-items:flex-end; 
+                          justify-content:center; 
+                          color:white; 
+                          font-size:0.95rem; 
+                          font-weight:700;">
+                ${asistencia}
+              </div>
+              <span style="font-size:0.85rem; color:#374151; margin-top:4px;">${
+                nombres[index]
+              }</span>
+            </div>
+          `
+            )
+            .join("")}
+        </div>
+      `;
+      }
+
+      function mostrarModal(content) {
+        document.getElementById("modalContent").innerHTML = content;
+        document.getElementById("actionModal").style.display = "block";
+      }
+
+      function cerrarModal() {
+        document.getElementById("actionModal").style.display = "none";
+      }
+
+      function mostrarNotificacion(mensaje) {
+        const toast = document.getElementById("toast");
+        toast.textContent = mensaje;
+        toast.classList.add("show");
+
+        setTimeout(() => {
+          toast.classList.remove("show");
+        }, 3000);
+      }
+
+      // Cerrar modal al hacer click fuera
+      window.onclick = function (event) {
+        const modal = document.getElementById("actionModal");
+        if (event.target === modal) {
+          cerrarModal();
+        }
+      };
+    </script>
+
+    <style>
+      /* Estilos para modal */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 1000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .modal-content {
+        background-color: white;
+        margin: 10% auto;
+        padding: 2rem;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 500px;
+        position: relative;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      }
+
+      .close-modal {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: var(--muted);
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1.5rem;
+        justify-content: flex-end;
+      }
+
+      .management-options {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        margin: 1.5rem 0;
+      }
+
+      .inscritos-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 1rem 0;
+        max-height: 300px;
+        overflow-y: auto;
+      }
+
+      .inscritos-list li {
+        padding: 0.5rem;
+        border-bottom: 1px solid #f1f5f9;
+      }
+
+      .horarios-list p {
+        padding: 0.5rem;
+        margin: 0.25rem 0;
+        background: #f8fafc;
+        border-radius: 6px;
+      }
+
+      /* Estilos para toast */
+      .toast {
+        visibility: hidden;
+        min-width: 250px;
+        background-color: #333;
+        color: white;
+        text-align: center;
+        border-radius: 8px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1000;
+        left: 50%;
+        bottom: 30px;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s, visibility 0.3s;
+      }
+
+      .toast.show {
+        visibility: visible;
+        opacity: 1;
+      }
+
+      /* Mejoras para botones */
+      .btn-block {
+        width: 100%;
+      }
+
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+
+      .btn {
+        transition: all 0.2s ease;
+      }
+
+      .btn:hover:not(:disabled) {
+        transform: translateY(-1px);
+      }
+    </style>
+  </body>
+</html>

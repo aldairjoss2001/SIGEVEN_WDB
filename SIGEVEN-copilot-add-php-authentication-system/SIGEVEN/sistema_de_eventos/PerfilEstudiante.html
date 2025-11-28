@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Perfil Estudiante - Sistema de Eventos</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="css/PerfilEstudiante.css" />
+  <!-- Material Icons -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
+</head>
+<body>
+  <!-- Vertical Sidebar Navigation -->
+  <aside class="sidebar">
+    <div class="sidebar-logo">
+      <img src="assets/icons/logo.png" alt="Logo EMI" class="logo-img">
+    </div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-item active">
+        <span class="material-symbols-outlined">home</span>
+        <span class="sidebar-text">INICIO</span>
+      </a>
+      <a href="Solicitudes.html" class="sidebar-item">
+        <span class="material-symbols-outlined">description</span>
+        <span class="sidebar-text">SOLICITUDES</span>
+      </a>
+      <a href="calendarioEstudiantes.html" class="sidebar-item">
+        <span class="material-symbols-outlined">calendar_month</span>
+        <span class="sidebar-text">CALENDARIO</span>
+      </a>
+      <a href="../logout.php" class="sidebar-item">
+        <span class="material-symbols-outlined">logout</span>
+        <span class="sidebar-text">SALIR</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Top Search Bar -->
+  <header class="top-header">
+    <div class="header-search">
+      <span class="material-symbols-outlined">search</span>
+      <input type="text" placeholder="Buscar eventos..." class="search-input" id="searchInput">
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="profile-container">
+    <!-- Inputs para tabs (CSS-only) -->
+    <input type="radio" name="profile-tab" id="tab-eventos" checked hidden>
+    <input type="radio" name="profile-tab" id="tab-asistidos" hidden>
+    <input type="radio" name="profile-tab" id="tab-guardados" hidden>
+    <input type="radio" name="profile-tab" id="tab-logros" hidden>
+    
+    <!-- Profile Header -->
+    <section class="profile-header">
+      <div class="cover-photo">
+        <img src="assets/uploads/portada-estudiante.jpeg" alt="Cover photo" class="cover-img">
+        <button class="edit-cover-btn" onclick="simularEdicion('portada')">
+          <span class="material-symbols-outlined">edit</span>
+        </button>
+      </div>
+
+      <div class="profile-info">
+        <div class="profile-picture">
+          <img src="assets/uploads/avatar-estudiante.jpeg" alt="Foto perfil" class="profile-img" id="profileImage">
+          <button class="edit-photo-btn" onclick="simularEdicion('foto')">
+            <span class="material-symbols-outlined">photo_camera</span>
+          </button>
+        </div>
+
+        <div class="profile-details">
+          <h1 class="profile-name" id="studentName">María Fernandez</h1>
+          <p class="profile-bio">Estudiante de Ingeniería de Sistemas</p>
+          <p class="profile-bio">6to Semestre</p>
+
+          <div class="profile-stats">
+            <div class="stat">
+              <span class="material-symbols-outlined stat-icon">event_available</span>
+              <span class="stat-number" id="eventsAttended">12</span>
+              <span class="stat-label">Eventos asistidos</span>
+            </div>
+            <div class="stat">
+              <span class="material-symbols-outlined stat-icon">calendar_clock</span>
+              <span class="stat-number" id="eventsUpcoming">5</span>
+              <span class="stat-label">Por asistir</span>
+            </div>
+            <div class="stat">
+              <span class="material-symbols-outlined stat-icon">workspace_premium</span>
+              <span class="stat-number" id="certificatesCount">3</span>
+              <span class="stat-label">Certificados</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <button class="btn btn-primary" onclick="editarPerfil()">
+            <span class="material-symbols-outlined">edit</span>
+            Editar Perfil
+          </button>
+          <button class="btn btn-secondary" onclick="mostrarConfiguracion()">
+            <span class="material-symbols-outlined">settings</span>
+            Configuración
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Navigation Tabs -->
+    <section class="profile-tabs">
+      <div class="tabs">
+        <label for="tab-eventos" class="tab" role="tab" aria-controls="eventos">
+          <span class="material-symbols-outlined">calendar_today</span>
+          Mis Eventos
+        </label>
+        <label for="tab-asistidos" class="tab" role="tab" aria-controls="asistidos">
+          <span class="material-symbols-outlined">check_circle</span>
+          Asistidos
+        </label>
+        <label for="tab-guardados" class="tab" role="tab" aria-controls="guardados">
+          <span class="material-symbols-outlined">bookmark</span>
+          Guardados
+        </label>
+        <label for="tab-logros" class="tab" role="tab" aria-controls="logros">
+          <span class="material-symbols-outlined">emoji_events</span>
+          Logros
+        </label>
+      </div>
+    </section>
+
+    <!-- Content Area -->
+    <section class="profile-content">
+
+      <!-- ========== Eventos (TAB) ========== -->
+      <div class="tab-content" id="eventos">
+        <div class="events-feed" id="eventsFeed">
+
+          <!-- Event Card 1 - CTF (Próximo) -->
+          <article class="event-card" data-event-id="1" data-event-type="upcoming">
+            <div class="event-header">
+              <img src="assets/images/ctf.jpeg" alt="Event image" class="event-cover">
+              <div class="event-badge">Próximo</div>
+            </div>
+            <div class="event-content">
+              <h3 class="event-title">VII VERSIÓN CTF EMI 2025</h3>
+              <div class="event-meta">
+                <span class="event-date">
+                  <span class="material-symbols-outlined">event</span>
+                  10 - 11 Oct 2025 - 18:00
+                </span>
+                <span class="event-location">
+                  <span class="material-symbols-outlined">location_on</span>
+                  Laboratorios de Computacion - Bloque A
+                </span>
+              </div>
+              <p class="event-description">Sexta version de desafio captura la bandera, donde los estudiantes pondrán a prueba sus habilidades....</p>
+              <div class="event-stats">
+                <span class="attendees">
+                  <span class="material-symbols-outlined">group</span>
+                  <span id="attendeesCount1">45</span> asistentes confirmados
+                </span>
+                <span class="capacity">Capacidad: 80 personas</span>
+              </div>
+              <div class="event-actions">
+                <button class="btn btn-confirm" onclick="confirmarAsistencia(1)">
+                  <span class="material-symbols-outlined">check_circle</span>
+                  Confirmar Asistencia
+                </button>
+                <button class="btn btn-secondary" onclick="guardarEvento(1)">
+                  <span class="material-symbols-outlined">bookmark</span>
+                  Guardar
+                </button>
+                <button class="btn btn-text" onclick="compartirEvento(1)">
+                  <span class="material-symbols-outlined">share</span>
+                  Compartir
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Event Card 2 - ARBORIZACIÓN (En Curso) -->
+          <article class="event-card" data-event-id="2" data-event-type="ongoing">
+            <div class="event-header">
+              <img src="assets/images/arborizacion.jpeg" alt="Event image" class="event-cover">
+              <div class="event-badge ongoing">En Curso</div>
+            </div>
+            <div class="event-content">
+              <h3 class="event-title">Campaña de Arborización</h3>
+              <div class="event-meta">
+                <span class="event-date">📅 05 Oct 2025</span>
+                <span class="event-location"><span class="material-symbols-outlined">location_on</span> Playón Irpavi</span>
+              </div>
+              <p class="event-description">Únete a nosotros en la campaña de arborización para contribuir al cuidado del medio ambiente...</p>
+              <div class="event-status">
+                <div class="status-confirmed">  <span class="material-symbols-outlined">check_circle</span> Asistencia confirmada</div>
+                <button class="btn btn-outline" onclick="verUbicacion(2)"><span class="material-symbols-outlined">location_on</span> Ver ubicación</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Event Card 3 - DEEPTECH (Finalizado) -->
+          <article class="event-card past-event" data-event-id="3" data-event-type="completed">
+            <div class="event-header">
+              <img src="assets/images/deeptech.jpeg" alt="Event image" class="event-cover">
+              <div class="event-badge past">Finalizado</div>
+            </div>
+            <div class="event-content">
+              <h3 class="event-title">Congreso Interuniversitario DEEPTECH</h3>
+              <div class="event-meta">
+                <span class="event-date">📅 08 - 09 Sep 2024</span>
+                <span class="event-location"><span class="material-symbols-outlined">location_on</span> Auditorio EMI, Irpavi</span>
+              </div>
+              <p class="event-description">Inteligencia Artificial, Bioingenieria, Ciencia de materiales y más...</p>
+              <div class="event-completion">
+                <div class="completion-badge">  <span class="material-symbols-outlined">emoji_events</span> Asistencia completada</div>
+                <button class="btn btn-text" onclick="descargarCertificado(3)">📄 Descargar certificado</button>
+              </div>
+            </div>
+          </article>
+
+        </div> <!-- /.events-feed -->
+      </div> <!-- /#eventos -->
+
+      <!-- ========== Asistidos (TAB) ========== -->
+      <div class="tab-content" id="asistidos">
+        <div class="events-feed" id="attendedEvents">
+          <!-- Los eventos asistidos se cargan dinámicamente -->
+        </div>
+      </div>
+
+      <!-- ========== Guardados (TAB) ========== -->
+      <div class="tab-content" id="guardados">
+        <div class="events-feed" id="savedEvents">
+          <!-- Los eventos guardados se cargan dinámicamente -->
+        </div>
+      </div>
+
+      <!-- ========== Logros (TAB) ========== -->
+      <div class="tab-content" id="logros">
+        <div class="section-header">
+          <h2>Logros y Certificados</h2>
+          <p>Tu progreso académico</p>
+        </div>
+        <div class="achievements-grid" id="achievementsGrid">
+          <!-- Los logros se cargan dinámicamente -->
+        </div>
+      </div>
+
+    </section> <!-- /.profile-content -->
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p style="color: #fed600">© 2025 Sistema de Gestión de Eventos Universitarios. Todos los derechos reservados.</p>
+  </footer>
+
+  <!-- Notificación Toast -->
+  <div id="toast" class="toast"></div>
+
+  <script>
+    // ========== DATOS SIMULADOS ==========
+    const studentData = {
+      name: "María Fernandez",
+      career: "Ingeniería de Sistemas",
+      semester: "6to Semestre",
+      stats: {
+        attended: 12,
+        upcoming: 5,
+        certificates: 3
+      }
+    };
+
+    const eventsData = {
+      1: {
+        id: 1,
+        title: "VII VERSIÓN CTF EMI 2025",
+        type: "upcoming",
+        date: "10 - 11 Oct 2025 - 18:00",
+        location: "Laboratorios de Computacion - Bloque A",
+        description: "Sexta version de desafio captura la bandera, donde los estudiantes pondrán a prueba sus habilidades...",
+        attendees: 45,
+        capacity: 80,
+        confirmed: false,
+        saved: false
+      },
+      2: {
+        id: 2,
+        title: "Campaña de Arborización",
+        type: "ongoing",
+        date: "05 Oct 2025",
+        location: "Playón Irpavi",
+        description: "Únete a nosotros en la campaña de arborización para contribuir al cuidado del medio ambiente...",
+        confirmed: true,
+        saved: false
+      },
+      3: {
+        id: 3,
+        title: "Congreso Interuniversitario DEEPTECH",
+        type: "completed",
+        date: "08 - 09 Sep 2024",
+        location: "Auditorio EMI, Irpavi",
+        description: "Inteligencia Artificial, Bioingenieria, Ciencia de materiales y más...",
+        attended: true,
+        certificate: true,
+        saved: false
+      }
+    };
+
+    const achievementsData = [
+      { id: 1, name: "Certificado CTF", date: "12 Oct 2025", type: "certificate" },
+      { id: 2, name: "Participación DEEPTECH", date: "09 Sep 2024", type: "participation" },
+      { id: 3, name: "Voluntariado Ambiental", date: "15 Ago 2024", type: "volunteer" }
+    ];
+
+    // ========== ESTADO DE LA APLICACIÓN ==========
+    let appState = {
+      savedEvents: [],
+      attendedEvents: [3], // IDs de eventos asistidos
+      confirmedEvents: [2] // IDs de eventos confirmados
+    };
+
+    // ========== INICIALIZACIÓN ==========
+    document.addEventListener('DOMContentLoaded', function() {
+      inicializarPerfil();
+      cargarEventosGuardados();
+      cargarEventosAsistidos();
+      cargarLogros();
+      configurarBusqueda();
+    });
+
+    // ========== FUNCIONES PRINCIPALES ==========
+
+    function inicializarPerfil() {
+      // Actualizar datos del perfil
+      document.getElementById('studentName').textContent = studentData.name;
+      document.getElementById('eventsAttended').textContent = studentData.stats.attended;
+      document.getElementById('eventsUpcoming').textContent = studentData.stats.upcoming;
+      document.getElementById('certificatesCount').textContent = studentData.stats.certificates;
+    }
+
+    function confirmarAsistencia(eventId) {
+      const event = eventsData[eventId];
+      if (!event) return;
+
+      const eventCard = document.querySelector(`[data-event-id="${eventId}"]`);
+      const confirmBtn = eventCard.querySelector('.btn-confirm');
+      
+      if (!appState.confirmedEvents.includes(eventId)) {
+        // Confirmar asistencia
+        appState.confirmedEvents.push(eventId);
+        event.confirmed = true;
+        
+        // Actualizar UI
+        confirmBtn.textContent = '✅ Asistencia Confirmada';
+        confirmBtn.disabled = true;
+        confirmBtn.style.opacity = '0.7';
+        
+        // Actualizar contador de asistentes
+        if (event.attendees !== undefined) {
+          event.attendees++;
+          document.getElementById(`attendeesCount${eventId}`).textContent = event.attendees;
+        }
+        
+        // Actualizar estadísticas
+        studentData.stats.upcoming--;
+        document.getElementById('eventsUpcoming').textContent = studentData.stats.upcoming;
+        
+        mostrarNotificacion('✅ Asistencia confirmada exitosamente');
+      }
+    }
+
+    function guardarEvento(eventId) {
+      const event = eventsData[eventId];
+      if (!event) return;
+
+      if (!appState.savedEvents.includes(eventId)) {
+        // Guardar evento
+        appState.savedEvents.push(eventId);
+        event.saved = true;
+        mostrarNotificacion('🔖 Evento guardado en tus favoritos');
+        
+        // Actualizar botón
+        const eventCard = document.querySelector(`[data-event-id="${eventId}"]`);
+        const saveBtn = eventCard.querySelector('.btn-secondary');
+        saveBtn.textContent = '🔖 Guardado';
+        saveBtn.style.background = '#fef3c7';
+        saveBtn.style.color = '#92400e';
+      } else {
+        // Quitar de guardados
+        appState.savedEvents = appState.savedEvents.filter(id => id !== eventId);
+        event.saved = false;
+        mostrarNotificacion('🗑️ Evento removido de guardados');
+        
+        const eventCard = document.querySelector(`[data-event-id="${eventId}"]`);
+        const saveBtn = eventCard.querySelector('.btn-secondary');
+        saveBtn.textContent = '🔖 Guardar';
+        saveBtn.style.background = '';
+        saveBtn.style.color = '';
+      }
+      
+      cargarEventosGuardados();
+    }
+
+    function compartirEvento(eventId) {
+      const event = eventsData[eventId];
+      if (!event) return;
+
+      // Simular compartir
+      const shareText = `¡Mira este evento: ${event.title} - ${event.date} en ${event.location}`;
+      
+      if (navigator.share) {
+        navigator.share({
+          title: event.title,
+          text: shareText,
+          url: window.location.href
+        });
+      } else {
+        // Fallback para navegadores que no soportan Web Share API
+        navigator.clipboard.writeText(shareText).then(() => {
+          mostrarNotificacion('📋 Enlace copiado al portapapeles');
+        });
+      }
+    }
+
+    function verUbicacion(eventId) {
+      const event = eventsData[eventId];
+      if (!event) return;
+
+      // Simular mostrar ubicación en mapa
+      mostrarNotificacion(`<span class="material-symbols-outlined">location_on</span> Mostrando ubicación: ${event.location}`);
+      
+      // En un sistema real, aquí se abriría Google Maps o mapa interno
+      setTimeout(() => {
+        alert(`Ubicación del evento:\n${event.location}\n\n(En un sistema real, se abriría el mapa)`);
+      }, 500);
+    }
+
+    function descargarCertificado(eventId) {
+      const event = eventsData[eventId];
+      if (!event || !event.certificate) return;
+
+      // Simular descarga de certificado
+      mostrarNotificacion('📄 Preparando descarga del certificado...');
+      
+      setTimeout(() => {
+        mostrarNotificacion('✅ Certificado descargado exitosamente');
+        // En un sistema real, aquí se iniciaría la descarga del PDF
+      }, 1500);
+    }
+
+    // ========== FUNCIONES DE CARGA DE DATOS ==========
+
+    function cargarEventosGuardados() {
+      const container = document.getElementById('savedEvents');
+      if (!container) return;
+
+      const savedEvents = appState.savedEvents.map(id => eventsData[id]).filter(Boolean);
+      
+      if (savedEvents.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <p>📭 No tienes eventos guardados</p>
+            <p style="color: var(--muted); font-size: 0.9rem;">Guarda eventos que te interesen para verlos aquí</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = savedEvents.map(event => `
+        <article class="event-card">
+          <div class="event-header">
+            <img src="assets/images/${event.id === 1 ? 'ctf' : event.id === 2 ? 'arborizacion' : 'deeptech'}.jpeg" 
+                 alt="Event image" class="event-cover">
+            <div class="event-badge">Guardado</div>
+          </div>
+          <div class="event-content">
+            <h3 class="event-title">${event.title}</h3>
+            <div class="event-meta">
+              <span class="event-date">📅 ${event.date}</span>
+              <span class="event-location"><span class="material-symbols-outlined">location_on</span> ${event.location}</span>
+            </div>
+            <p class="event-description">${event.description}</p>
+            <div class="event-actions">
+              <button class="btn btn-primary" onclick="confirmarAsistencia(${event.id})">
+                ✅ Confirmar Asistencia
+              </button>
+              <button class="btn btn-secondary" onclick="guardarEvento(${event.id})" 
+                      style="background: #fef3c7; color: #92400e;">
+                🔖 Guardado
+              </button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function cargarEventosAsistidos() {
+      const container = document.getElementById('attendedEvents');
+      if (!container) return;
+
+      const attendedEvents = appState.attendedEvents.map(id => eventsData[id]).filter(Boolean);
+      
+      if (attendedEvents.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <p>📊 No has asistido a eventos aún</p>
+            <p style="color: var(--muted); font-size: 0.9rem;">Tu historial de eventos aparecerá aquí</p>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = attendedEvents.map(event => `
+        <article class="event-card">
+          <div class="event-header">
+            <img src="assets/images/${event.id === 1 ? 'ctf' : event.id === 2 ? 'arborizacion' : 'deeptech'}.jpeg" 
+                 alt="Event image" class="event-cover">
+            <div class="event-badge past">Asistido</div>
+          </div>
+          <div class="event-content">
+            <h3 class="event-title">${event.title}</h3>
+            <div class="event-meta">
+              <span class="event-date">📅 ${event.date}</span>
+              <span class="event-location"><span class="material-symbols-outlined">location_on</span> ${event.location}</span>
+            </div>
+            <p class="event-description">${event.description}</p>
+            <div class="event-actions">
+              ${event.certificate ? `
+                <button class="btn btn-text" onclick="descargarCertificado(${event.id})">
+                  📄 Descargar certificado
+                </button>
+              ` : ''}
+              <button class="btn btn-outline" onclick="compartirEvento(${event.id})">
+                📤 Compartir experiencia
+              </button>
+            </div>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    function cargarLogros() {
+      const container = document.getElementById('achievementsGrid');
+      if (!container) return;
+
+      container.innerHTML = achievementsData.map(achievement => `
+        <div class="achievement-card" data-achievement-id="${achievement.id}">
+          <div class="achievement-icon">
+            ${achievement.type === 'certificate' ? '📜' : 
+              achievement.type === 'participation' ? '🏆' : '🤝'}
+          </div>
+          <div class="achievement-content">
+            <strong>${achievement.name}</strong>
+            <div style="color: var(--muted); font-size: 0.9rem;">
+              Obtenido: ${achievement.date}
+            </div>
+          </div>
+          <button class="btn btn-text" onclick="verDetalleLogro(${achievement.id})">
+            👁️ Ver
+          </button>
+        </div>
+      `).join('');
+    }
+
+    // ========== FUNCIONES AUXILIARES ==========
+
+    function simularEdicion(tipo) {
+      if (tipo === 'foto') {
+        mostrarNotificacion('📷 Función de edición de foto simulada');
+        // En un sistema real, aquí se abriría el selector de archivos
+      } else if (tipo === 'portada') {
+        mostrarNotificacion('🎨 Función de edición de portada simulada');
+      }
+    }
+
+    function editarPerfil() {
+      const nuevoNombre = prompt('Editar nombre:', studentData.name);
+      if (nuevoNombre && nuevoNombre.trim() !== '') {
+        studentData.name = nuevoNombre.trim();
+        document.getElementById('studentName').textContent = studentData.name;
+        mostrarNotificacion('✅ Perfil actualizado correctamente');
+      }
+    }
+
+    function mostrarConfiguracion() {
+      mostrarNotificacion('⚙️ Panel de configuración (simulado)');
+      // En un sistema real, aquí se mostraría un modal de configuración
+    }
+
+    function verDetalleLogro(achievementId) {
+      const achievement = achievementsData.find(a => a.id === achievementId);
+      if (achievement) {
+        alert(`Logro: ${achievement.name}\nFecha: ${achievement.date}\nTipo: ${achievement.type}`);
+      }
+    }
+
+    function configurarBusqueda() {
+      const searchInput = document.getElementById('searchInput');
+      if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+          const searchTerm = e.target.value.toLowerCase();
+          filtrarEventos(searchTerm);
+        });
+      }
+    }
+
+    function filtrarEventos(searchTerm) {
+      const eventCards = document.querySelectorAll('.event-card');
+      
+      eventCards.forEach(card => {
+        const title = card.querySelector('.event-title').textContent.toLowerCase();
+        const description = card.querySelector('.event-description').textContent.toLowerCase();
+        
+        if (title.includes(searchTerm) || description.includes(searchTerm)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function mostrarNotificacion(mensaje) {
+      const toast = document.getElementById('toast');
+      toast.textContent = mensaje;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+  </script>
+
+  <style>
+    /* Estilos para las notificaciones Toast */
+    .toast {
+      visibility: hidden;
+      min-width: 250px;
+      background-color: #333;
+      color: white;
+      text-align: center;
+      border-radius: 8px;
+      padding: 16px;
+      position: fixed;
+      z-index: 1000;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+
+    .toast.show {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Estilos para los logros */
+    .achievements-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .achievement-card {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      border-left: 4px solid var(--azul-institucional);
+    }
+
+    .achievement-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .achievement-content {
+      flex: 1;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    /* Mejoras para botones interactivos */
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .btn {
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+    }
+  </style>
+</body>
+</html>
