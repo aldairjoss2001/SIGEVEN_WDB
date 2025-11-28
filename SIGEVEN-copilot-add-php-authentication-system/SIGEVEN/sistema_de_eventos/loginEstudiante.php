@@ -290,14 +290,16 @@
         <?php
         session_start();
         if (isset($_SESSION['error_login'])) {
-            echo "showToast('" . addslashes($_SESSION['error_login']) . "', 'error');";
-            echo "document.getElementById('mensaje-error').textContent = '" . addslashes($_SESSION['error_login']) . "';";
+            $error_msg = htmlspecialchars($_SESSION['error_login'], ENT_QUOTES, 'UTF-8');
+            echo "showToast('" . $error_msg . "', 'error');";
+            echo "document.getElementById('mensaje-error').textContent = '" . $error_msg . "';";
             echo "document.getElementById('mensaje-error').style.display = 'block';";
             unset($_SESSION['error_login']);
         }
         if (isset($_SESSION['exito_registro'])) {
-            echo "showToast('" . addslashes($_SESSION['exito_registro']) . "', 'success');";
-            echo "document.getElementById('mensaje-exito').textContent = '" . addslashes($_SESSION['exito_registro']) . "';";
+            $exito_msg = htmlspecialchars($_SESSION['exito_registro'], ENT_QUOTES, 'UTF-8');
+            echo "showToast('" . $exito_msg . "', 'success');";
+            echo "document.getElementById('mensaje-exito').textContent = '" . $exito_msg . "';";
             echo "document.getElementById('mensaje-exito').style.display = 'block';";
             unset($_SESSION['exito_registro']);
         }

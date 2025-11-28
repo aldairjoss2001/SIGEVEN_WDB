@@ -112,6 +112,9 @@
       font-size: 22px;
       margin: 0;
     }
+    .password-input-icon {
+      padding-left: 45px;
+    }
     
     /* Toast Notifications */
     .toast-notification {
@@ -298,7 +301,7 @@
             </label>
             <span class="material-symbols-outlined">lock</span>
             <div class="password-wrapper">
-              <input type="password" id="contrasena" name="contrasena" required minlength="6" placeholder="Mínimo 6 caracteres" style="padding-left: 45px;">
+              <input type="password" id="contrasena" name="contrasena" required minlength="6" placeholder="Mínimo 6 caracteres" class="password-input-icon">
               <button type="button" class="toggle-password" onclick="togglePassword('contrasena', this)">
                 <span class="material-symbols-outlined">visibility</span>
               </button>
@@ -461,14 +464,16 @@
       <?php
       session_start();
       if (isset($_SESSION['error_registro'])) {
-          echo "showToast('" . addslashes($_SESSION['error_registro']) . "', 'error');";
-          echo "document.getElementById('mensaje-error').textContent = '" . addslashes($_SESSION['error_registro']) . "';";
+          $error_msg = htmlspecialchars($_SESSION['error_registro'], ENT_QUOTES, 'UTF-8');
+          echo "showToast('" . $error_msg . "', 'error');";
+          echo "document.getElementById('mensaje-error').textContent = '" . $error_msg . "';";
           echo "document.getElementById('mensaje-error').style.display = 'block';";
           unset($_SESSION['error_registro']);
       }
       if (isset($_SESSION['exito_registro'])) {
-          echo "showToast('" . addslashes($_SESSION['exito_registro']) . "', 'success');";
-          echo "document.getElementById('mensaje-exito').textContent = '" . addslashes($_SESSION['exito_registro']) . "';";
+          $exito_msg = htmlspecialchars($_SESSION['exito_registro'], ENT_QUOTES, 'UTF-8');
+          echo "showToast('" . $exito_msg . "', 'success');";
+          echo "document.getElementById('mensaje-exito').textContent = '" . $exito_msg . "';";
           echo "document.getElementById('mensaje-exito').style.display = 'block';";
           unset($_SESSION['exito_registro']);
       }
