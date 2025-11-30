@@ -380,6 +380,18 @@
             </button>
         </div>
 
+        <!-- Export Buttons -->
+        <div class="export-actions" style="display: flex; gap: 1rem; margin-bottom: 1.5rem;">
+            <button class="btn btn-success" onclick="SIGEVEN.exportarExcel('usuarios')">
+                <span class="material-symbols-outlined">table_chart</span>
+                Exportar Excel
+            </button>
+            <button class="btn btn-danger" onclick="SIGEVEN.exportarPDF('usuarios')">
+                <span class="material-symbols-outlined">picture_as_pdf</span>
+                Exportar PDF
+            </button>
+        </div>
+
         <!-- Users Table -->
         <div class="users-table">
             <table>
@@ -388,55 +400,261 @@
                         <th>Código</th>
                         <th>Nombre</th>
                         <th>Correo</th>
+                        <th>Rol</th>
                         <th>Carrera</th>
-                        <th>Fecha Registro</th>
                         <th>Estado</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="usuarios-tbody">
+                    <!-- Loaded dynamically -->
                     <tr>
-                        <td>E213456-7</td>
-                        <td>Juan Pérez López</td>
-                        <td>juan.perez@est.emi.edu.bo</td>
-                        <td>Sistemas</td>
-                        <td>15/03/2025</td>
-                        <td><span class="status-badge status-active">Activo</span></td>
-                        <td>
-                            <button class="action-btn"><span class="material-symbols-outlined">edit</span></button>
-                            <button class="action-btn"><span class="material-symbols-outlined">visibility</span></button>
-                            <button class="action-btn"><span class="material-symbols-outlined">block</span></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>E213457-8</td>
-                        <td>María González Flores</td>
-                        <td>maria.gonzalez@est.emi.edu.bo</td>
-                        <td>Civil</td>
-                        <td>20/03/2025</td>
-                        <td><span class="status-badge status-active">Activo</span></td>
-                        <td>
-                            <button class="action-btn"><span class="material-symbols-outlined">edit</span></button>
-                            <button class="action-btn"><span class="material-symbols-outlined">visibility</span></button>
-                            <button class="action-btn"><span class="material-symbols-outlined">block</span></button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>E213458-9</td>
-                        <td>Carlos Mamani Quispe</td>
-                        <td>carlos.mamani@est.emi.edu.bo</td>
-                        <td>Industrial</td>
-                        <td>25/03/2025</td>
-                        <td><span class="status-badge status-inactive">Inactivo</span></td>
-                        <td>
-                            <button class="action-btn"><span class="material-symbols-outlined">edit</span></button>
-                            <button class="action-btn"><span class="material-symbols-outlined">visibility</span></button>
-                            <button class="action-btn"><span class="material-symbols-outlined">check_circle</span></button>
+                        <td colspan="7" style="text-align: center; padding: 2rem;">
+                            <span class="loading-spinner"></span> Cargando usuarios...
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </main>
+
+    <!-- API Script -->
+    <script src="../sistema_de_eventos/js/api.js"></script>
+    <script>
+        // Current filter state
+        let currentRol = null;
+        let currentBusqueda = '';
+
+        // Load users on page load
+        document.addEventListener('DOMContentLoaded', loadUsuarios);
+
+        // Tab click handlers
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                const text = this.textContent.toLowerCase();
+                if (text.includes('estudiantes')) {
+                    currentRol = 'estudiante';
+                } else if (text.includes('docentes')) {
+                    currentRol = 'docente';
+                } else if (text.includes('administradores')) {
+                    currentRol = 'admin';
+                } else {
+                    currentRol = null;
+                }
+                loadUsuarios();
+            });
+        });
+
+        // Search handler
+        document.querySelector('.search-box input').addEventListener('input', function(e) {
+            currentBusqueda = e.target.value;
+            // Debounce search
+            clearTimeout(this.searchTimeout);
+            this.searchTimeout = setTimeout(loadUsuarios, 300);
+        });
+
+        async function loadUsuarios() {
+            const tbody = document.getElementById('usuarios-tbody');
+            tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 2rem;"><span class="loading-spinner"></span> Cargando usuarios...</td></tr>`;
+
+            const filters = {};
+            if (currentRol) filters.rol = currentRol;
+            if (currentBusqueda) filters.buscar = currentBusqueda;
+
+            const result = await SIGEVEN.UsuariosAPI.getAll(filters);
+
+            if (result.success && result.data) {
+                if (result.data.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 2rem; color: #666;">No se encontraron usuarios</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = result.data.map((user, index) => `
+                    <tr class="stagger-item" style="animation-delay: ${index * 0.05}s">
+                        <td>${user.codigo || '-'}</td>
+                        <td>${user.nombre}</td>
+                        <td>${user.correo}</td>
+                        <td><span class="role-badge role-${user.rol}">${capitalizeFirst(user.rol)}</span></td>
+                        <td>${user.carrera || '-'}</td>
+                        <td><span class="status-badge status-${user.estado}">${capitalizeFirst(user.estado)}</span></td>
+                        <td>
+                            <button class="action-btn" onclick="verUsuario(${user.id})" title="Ver detalles">
+                                <span class="material-symbols-outlined">visibility</span>
+                            </button>
+                            ${user.estado === 'pendiente' ? `
+                                <button class="action-btn action-success" onclick="SIGEVEN.aprobarUsuario(${user.id}, this)" title="Aprobar">
+                                    <span class="material-symbols-outlined">check_circle</span>
+                                </button>
+                            ` : ''}
+                            ${user.rol !== 'admin' ? `
+                                <button class="action-btn action-danger" onclick="SIGEVEN.eliminarUsuario(${user.id}, this)" title="Eliminar">
+                                    <span class="material-symbols-outlined">delete</span>
+                                </button>
+                            ` : ''}
+                        </td>
+                    </tr>
+                `).join('');
+
+                // Update tab counts
+                updateTabCounts(result.data);
+            } else {
+                tbody.innerHTML = `<tr><td colspan="7" style="text-align: center; padding: 2rem; color: #dc3545;">Error al cargar usuarios: ${result.message}</td></tr>`;
+            }
+        }
+
+        function updateTabCounts(usuarios) {
+            const counts = {
+                estudiante: usuarios.filter(u => u.rol === 'estudiante').length,
+                docente: usuarios.filter(u => u.rol === 'docente').length,
+                admin: usuarios.filter(u => u.rol === 'admin').length
+            };
+            
+            document.querySelectorAll('.tab').forEach(tab => {
+                const text = tab.textContent.toLowerCase();
+                if (text.includes('estudiantes')) {
+                    tab.innerHTML = `<span class="material-symbols-outlined">school</span> Estudiantes (${counts.estudiante})`;
+                } else if (text.includes('docentes')) {
+                    tab.innerHTML = `<span class="material-symbols-outlined">psychology</span> Docentes (${counts.docente})`;
+                } else if (text.includes('administradores')) {
+                    tab.innerHTML = `<span class="material-symbols-outlined">admin_panel_settings</span> Administradores (${counts.admin})`;
+                }
+            });
+        }
+
+        function verUsuario(id) {
+            SIGEVEN.showToast('Cargando detalles del usuario...', 'info');
+            // In a real app, this would open a modal with user details
+            SIGEVEN.UsuariosAPI.getById(id).then(result => {
+                if (result.success) {
+                    const user = result.data;
+                    alert(`Usuario: ${user.nombre}\nCorreo: ${user.correo}\nRol: ${user.rol}\nEstado: ${user.estado}`);
+                }
+            });
+        }
+
+        function capitalizeFirst(str) {
+            return str ? str.charAt(0).toUpperCase() + str.slice(1) : '';
+        }
+    </script>
+
+    <style>
+        /* Additional styles for dynamic content */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #163E8C;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stagger-item {
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .role-estudiante {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .role-docente {
+            background: #fff3e0;
+            color: #ef6c00;
+        }
+
+        .role-admin {
+            background: #fce4ec;
+            color: #c2185b;
+        }
+
+        .role-externo {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .status-activo {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-inactivo {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-pendiente {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .action-success {
+            color: #28a745 !important;
+        }
+
+        .action-success:hover {
+            color: #1e7e34 !important;
+        }
+
+        .action-danger {
+            color: #dc3545 !important;
+        }
+
+        .action-danger:hover {
+            color: #bd2130 !important;
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .export-actions .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    </style>
 </body>
 </html>

@@ -385,54 +385,207 @@
                     </div>
                 </div>
             </section>
+
+            <!-- Export Buttons -->
+            <section class="export-section" style="margin-top: 2rem; padding: 1.5rem; background: white; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <h3 style="color: #163E8C; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem;">
+                    <span class="material-symbols-outlined">download</span>
+                    Exportar Datos
+                </h3>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                    <button class="btn btn-success" onclick="SIGEVEN.exportarExcel('eventos')">
+                        <span class="material-symbols-outlined">table_chart</span>
+                        Exportar Excel
+                    </button>
+                    <button class="btn btn-danger" onclick="SIGEVEN.exportarPDF('eventos')">
+                        <span class="material-symbols-outlined">picture_as_pdf</span>
+                        Exportar PDF
+                    </button>
+                    <button class="btn btn-secondary" onclick="SIGEVEN.exportarExcel('solicitudes')">
+                        <span class="material-symbols-outlined">assignment</span>
+                        Exportar Solicitudes
+                    </button>
+                </div>
+            </section>
         </div>
     </main>
 
+    <!-- API Script -->
+    <script src="../sistema_de_eventos/js/api.js"></script>
     <script>
-        function approveEvent(button) {
-            const eventCard = button.closest('.event-card');
-            eventCard.classList.remove('pending', 'urgent');
-            eventCard.classList.add('approved');
+        // Load events on page load
+        document.addEventListener('DOMContentLoaded', loadEventos);
+
+        async function loadEventos() {
+            const container = document.querySelector('.events-list-section');
             
-            const statusBadge = eventCard.querySelector('.event-status-badge');
-            statusBadge.textContent = '✅ Aprobado';
-            statusBadge.className = 'event-status-badge approved';
-            
-            // Simular actualización de contador
-            updatePendingCount(-1);
-            
-            showNotification('Evento aprobado exitosamente', 'success');
+            // Show loading state
+            container.innerHTML = `
+                <div style="text-align: center; padding: 3rem;">
+                    <span class="loading-spinner" style="width: 40px; height: 40px;"></span>
+                    <p style="margin-top: 1rem; color: #666;">Cargando eventos...</p>
+                </div>
+            `;
+
+            const result = await SIGEVEN.EventosAPI.getAll({ estado: 'pendiente' });
+
+            if (result.success && result.data) {
+                if (result.data.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state" style="text-align: center; padding: 3rem; color: #666;">
+                            <span class="material-symbols-outlined" style="font-size: 48px; color: #28a745;">check_circle</span>
+                            <p style="margin-top: 1rem;">No hay eventos pendientes de revisión</p>
+                        </div>
+                    `;
+                    document.querySelector('.badge-count').textContent = '0';
+                    return;
+                }
+
+                container.innerHTML = result.data.map((evento, index) => `
+                    <div class="event-card pending stagger-item" style="animation-delay: ${index * 0.1}s" data-id="${evento.id}">
+                        <div class="event-header">
+                            <div class="event-basic-info">
+                                <h4 class="event-title">${evento.titulo}</h4>
+                                <div class="event-meta">
+                                    <span class="event-creator">👨‍🏫 ${evento.organizador_nombre || 'Organizador'}</span>
+                                    <span class="event-date">📅 ${formatDate(evento.fecha_inicio)}</span>
+                                    <span class="event-location">📍 ${evento.espacio_nombre || 'Por definir'}</span>
+                                    <span class="event-capacity">👥 ${evento.capacidad} personas</span>
+                                </div>
+                            </div>
+                            <div class="event-status-badge pending">⏳ Pendiente</div>
+                        </div>
+
+                        <div class="event-details">
+                            <p class="event-description">${evento.descripcion}</p>
+                            
+                            ${evento.requisitos ? `
+                            <div class="event-requirements">
+                                <h5>Requerimientos Especiales:</h5>
+                                <p>${evento.requisitos}</p>
+                            </div>
+                            ` : ''}
+                        </div>
+
+                        <div class="event-actions">
+                            <button class="btn btn-success btn-animated" onclick="aprobarEventoDB(${evento.id}, this)">
+                                ✅ Aprobar Evento
+                            </button>
+                            <button class="btn btn-danger btn-animated" onclick="rechazarEventoDB(${evento.id}, this)">
+                                ❌ Rechazar
+                            </button>
+                            <button class="btn btn-warning btn-animated" onclick="requestChanges(this)">
+                                📝 Solicitar Cambios
+                            </button>
+                            <button class="btn btn-outline btn-animated" onclick="viewDetails(${evento.id})">
+                                👁️ Ver Detalles
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                document.querySelector('.badge-count').textContent = result.data.length;
+            } else {
+                container.innerHTML = `
+                    <div class="empty-state" style="text-align: center; padding: 3rem; color: #dc3545;">
+                        <span class="material-symbols-outlined" style="font-size: 48px;">error</span>
+                        <p style="margin-top: 1rem;">Error al cargar eventos: ${result.message}</p>
+                        <button class="btn btn-primary" onclick="loadEventos()" style="margin-top: 1rem;">Reintentar</button>
+                    </div>
+                `;
+            }
         }
 
-        function rejectEvent(button) {
-            if (confirm('¿Está seguro de que desea rechazar este evento?')) {
-                const eventCard = button.closest('.event-card');
-                eventCard.style.opacity = '0.6';
-                
-                showNotification('Evento rechazado', 'error');
+        async function aprobarEventoDB(id, button) {
+            const confirmed = await confirmAction('¿Está seguro de aprobar este evento?');
+            if (!confirmed) return;
+
+            showLoading(button, 'Aprobando...');
+            
+            const result = await SIGEVEN.EventosAPI.aprobar(id);
+            
+            hideLoading(button);
+            
+            if (result.success) {
+                SIGEVEN.showToast('Evento aprobado exitosamente', 'success');
+                const card = button.closest('.event-card');
+                if (card) {
+                    card.classList.remove('pending');
+                    card.classList.add('approved');
+                    const badge = card.querySelector('.event-status-badge');
+                    if (badge) {
+                        badge.textContent = '✅ Aprobado';
+                        badge.className = 'event-status-badge approved';
+                    }
+                    // Remove action buttons
+                    card.querySelector('.event-actions').innerHTML = `
+                        <span style="color: #28a745; font-weight: 600;">
+                            <span class="material-symbols-outlined">check_circle</span>
+                            Evento aprobado
+                        </span>
+                    `;
+                }
                 updatePendingCount(-1);
-                
-                // En un sistema real, aquí iría la lógica de rechazo
-                setTimeout(() => {
-                    eventCard.remove();
-                }, 1000);
+            } else {
+                SIGEVEN.showToast(result.message || 'Error al aprobar evento', 'error');
+            }
+        }
+
+        async function rechazarEventoDB(id, button) {
+            const motivo = prompt('Por favor, ingrese el motivo del rechazo:');
+            if (!motivo) {
+                SIGEVEN.showToast('Debe ingresar un motivo para rechazar', 'warning');
+                return;
+            }
+
+            showLoading(button, 'Rechazando...');
+            
+            const result = await SIGEVEN.EventosAPI.rechazar(id, motivo);
+            
+            hideLoading(button);
+            
+            if (result.success) {
+                SIGEVEN.showToast('Evento rechazado', 'info');
+                const card = button.closest('.event-card');
+                if (card) {
+                    card.style.animation = 'fadeOut 0.5s ease forwards';
+                    setTimeout(() => card.remove(), 500);
+                }
+                updatePendingCount(-1);
+            } else {
+                SIGEVEN.showToast(result.message || 'Error al rechazar evento', 'error');
             }
         }
 
         function requestChanges(button) {
             const changes = prompt('¿Qué cambios solicita para este evento?');
             if (changes) {
-                showNotification('Solicitud de cambios enviada al docente', 'warning');
+                SIGEVEN.showToast('Solicitud de cambios enviada al docente', 'warning');
             }
         }
 
-        function viewDetails(button) {
-            alert('Aquí se mostrarían los detalles completos del evento en un modal o página separada');
+        async function viewDetails(id) {
+            SIGEVEN.showToast('Cargando detalles del evento...', 'info');
+            const result = await SIGEVEN.EventosAPI.getById(id);
+            if (result.success) {
+                const e = result.data;
+                alert(`
+Título: ${e.titulo}
+Descripción: ${e.descripcion}
+Tipo: ${e.tipo}
+Fecha: ${e.fecha_inicio} - ${e.fecha_fin}
+Espacio: ${e.espacio_nombre || 'Por definir'}
+Organizador: ${e.organizador_nombre}
+Capacidad: ${e.capacidad}
+Inscritos: ${e.inscritos}
+Estado: ${e.estado}
+                `.trim());
+            }
         }
 
         function updatePendingCount(change) {
             const badge = document.querySelector('.badge-count');
-            let current = parseInt(badge.textContent);
+            let current = parseInt(badge.textContent) || 0;
             badge.textContent = Math.max(0, current + change);
         }
 
@@ -444,9 +597,41 @@
             toggleIcon.textContent = section.classList.contains('collapsed') ? '▶' : '▼';
         }
 
-        function showNotification(message, type) {
-            // Simulación simple de notificación
-            alert(`${type === 'success' ? '✅' : type === 'error' ? '❌' : '⚠️'} ${message}`);
+        function formatDate(dateStr) {
+            if (!dateStr) return 'Sin fecha';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: 'short',
+                year: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+        }
+
+        async function confirmAction(message) {
+            return new Promise((resolve) => {
+                if (confirm(message)) {
+                    resolve(true);
+                } else {
+                    resolve(false);
+                }
+            });
+        }
+
+        function showLoading(element, text = 'Cargando...') {
+            const originalContent = element.innerHTML;
+            element.dataset.originalContent = originalContent;
+            element.innerHTML = `<span class="loading-spinner"></span> ${text}`;
+            element.disabled = true;
+        }
+
+        function hideLoading(element) {
+            if (element.dataset.originalContent) {
+                element.innerHTML = element.dataset.originalContent;
+                delete element.dataset.originalContent;
+            }
+            element.disabled = false;
         }
 
         // Inicialización
@@ -455,5 +640,97 @@
             toggleSection('approved-events');
         });
     </script>
+
+    <style>
+        /* Additional animation styles */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #163E8C;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+        }
+
+        .stagger-item {
+            opacity: 0;
+            animation: fadeInUp 0.5s ease forwards;
+        }
+
+        .btn-animated {
+            transition: all 0.3s ease;
+        }
+
+        .btn-animated:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #218838;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .btn-secondary {
+            background: #FED600;
+            color: #163E8C;
+            font-weight: 600;
+        }
+
+        .btn-secondary:hover {
+            background: #e5c000;
+        }
+
+        .event-card.approved {
+            border-left: 4px solid #28a745;
+            background: #f8fff9;
+        }
+
+        .event-status-badge.approved {
+            background: #d4edda;
+            color: #155724;
+        }
+    </style>
 </body>
 </html>
