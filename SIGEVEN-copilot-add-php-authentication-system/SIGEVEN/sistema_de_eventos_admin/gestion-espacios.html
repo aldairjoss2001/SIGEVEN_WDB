@@ -14,68 +14,80 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: #f5f7fa;
+            background: linear-gradient(rgba(0,19,51,0.04), rgba(0,10,30,0.04)), #f4f6f8;
             min-height: 100vh;
         }
 
-        /* Sidebar */
-        .sidebar {
+        /* Vertical Sidebar for Admin */
+        .admin-sidebar {
             position: fixed;
             left: 0;
             top: 0;
             width: 250px;
             height: 100vh;
             background: #163E8C;
-            padding: 2rem 0;
+            padding: 20px 0;
             z-index: 1000;
-            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
         }
-
-        .sidebar-logo {
+        
+        .admin-sidebar-logo {
+            padding: 0 20px 30px;
             text-align: center;
-            margin-bottom: 2rem;
-            padding: 0 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
         }
-
-        .sidebar-logo img {
+        
+        .admin-sidebar-logo img {
+            width: 100%;
             max-width: 150px;
             height: auto;
+            object-fit: contain;
         }
-
-        .sidebar-menu {
-            list-style: none;
+        
+        .admin-sidebar-logo h2 {
+            color: #FED600;
+            font-size: 1.2rem;
+            margin-top: 10px;
         }
-
-        .sidebar-menu li {
-            margin: 0.5rem 0;
+        
+        .admin-sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            padding: 0 10px;
         }
-
-        .sidebar-menu a {
+        
+        .admin-sidebar-item {
             display: flex;
             align-items: center;
-            padding: 1rem 1.5rem;
-            color: white;
+            gap: 12px;
+            padding: 14px 16px;
+            color: #fff;
             text-decoration: none;
+            border-radius: 8px;
             transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.95rem;
         }
-
-        .sidebar-menu a:hover {
+        
+        .admin-sidebar-item .material-symbols-outlined {
+            font-size: 24px;
+        }
+        
+        .admin-sidebar-item:hover {
             background: rgba(254, 214, 0, 0.15);
+            color: #FED600;
         }
-
-        .sidebar-menu a.active {
+        
+        .admin-sidebar-item.active {
             background: #FED600;
             color: #163E8C;
-            font-weight: 600;
-        }
-
-        .sidebar-menu .material-symbols-outlined {
-            margin-right: 0.75rem;
-            font-size: 24px;
         }
 
         /* Top Header */
-        .top-header {
+        .admin-top-header {
             position: fixed;
             left: 250px;
             top: 0;
@@ -90,17 +102,26 @@
             z-index: 999;
         }
 
-        .header-title {
+        .admin-header-title {
             font-size: 1.5rem;
             color: #163E8C;
             font-weight: 600;
         }
 
-        .header-user {
+        .admin-user-info {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            color: #666;
+        }
+        
+        .admin-user-info .material-symbols-outlined {
+            color: #163E8C;
+            font-size: 32px;
+        }
+        
+        .admin-user-name {
+            font-weight: 600;
+            color: #163E8C;
         }
 
         /* Main Content */
@@ -374,30 +395,52 @@
     </style>
 </head>
 <body>
-    <!-- Sidebar -->
-    <div class="sidebar">
-        <div class="sidebar-logo">
-            <img src="../sistema_de_eventos/imagenes/logo.png" alt="Logo EMI">
+    <!-- Vertical Sidebar Navigation -->
+    <aside class="admin-sidebar">
+        <div class="admin-sidebar-logo">
+            <img src="../sistema_de_eventos/assets/icons/logo.png" alt="Logo EMI">
+            <h2>Panel Admin</h2>
         </div>
-        <ul class="sidebar-menu">
-            <li><a href="index.html"><span class="material-symbols-outlined">dashboard</span>DASHBOARD</a></li>
-            <li><a href="gestion-eventos.html"><span class="material-symbols-outlined">event</span>EVENTOS</a></li>
-            <li><a href="gestion-usuarios.html"><span class="material-symbols-outlined">group</span>USUARIOS</a></li>
-            <li><a href="gestion-espacios.html" class="active"><span class="material-symbols-outlined">meeting_room</span>ESPACIOS</a></li>
-            <li><a href="reportes.html"><span class="material-symbols-outlined">assessment</span>REPORTES</a></li>
-            <li><a href="configuracion.html"><span class="material-symbols-outlined">settings</span>CONFIGURACIÓN</a></li>
-            <li><a href="../logout.php"><span class="material-symbols-outlined">logout</span>SALIR</a></li>
-        </ul>
-    </div>
+        <nav class="admin-sidebar-nav">
+            <a href="index.html" class="admin-sidebar-item">
+                <span class="material-symbols-outlined">dashboard</span>
+                <span>DASHBOARD</span>
+            </a>
+            <a href="gestion-eventos.html" class="admin-sidebar-item">
+                <span class="material-symbols-outlined">event_note</span>
+                <span>EVENTOS</span>
+            </a>
+            <a href="gestion-usuarios.html" class="admin-sidebar-item">
+                <span class="material-symbols-outlined">groups</span>
+                <span>USUARIOS</span>
+            </a>
+            <a href="gestion-espacios.html" class="admin-sidebar-item active">
+                <span class="material-symbols-outlined">meeting_room</span>
+                <span>ESPACIOS</span>
+            </a>
+            <a href="reportes.html" class="admin-sidebar-item">
+                <span class="material-symbols-outlined">assessment</span>
+                <span>REPORTES</span>
+            </a>
+            <a href="configuracion.html" class="admin-sidebar-item">
+                <span class="material-symbols-outlined">settings</span>
+                <span>CONFIGURACIÓN</span>
+            </a>
+            <a href="../logout.php" class="admin-sidebar-item">
+                <span class="material-symbols-outlined">logout</span>
+                <span>SALIR</span>
+            </a>
+        </nav>
+    </aside>
 
     <!-- Top Header -->
-    <div class="top-header">
-        <h1 class="header-title">Gestión de Espacios</h1>
-        <div class="header-user">
+    <header class="admin-top-header">
+        <h1 class="admin-header-title">Gestión de Espacios</h1>
+        <div class="admin-user-info">
             <span class="material-symbols-outlined">account_circle</span>
-            <span>Admin</span>
+            <span class="admin-user-name">Administrador</span>
         </div>
-    </div>
+    </header>
 
     <!-- Main Content -->
     <div class="main-content">

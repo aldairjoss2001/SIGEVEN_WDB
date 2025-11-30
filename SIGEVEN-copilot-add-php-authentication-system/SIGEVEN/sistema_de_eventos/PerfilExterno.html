@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="css/styles.css" />
   <link rel="stylesheet" href="css/PerfilEstudiante.css" />
   <!-- Material Icons from Google Fonts -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" />
   <style>
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -23,6 +23,33 @@
       font-weight: 600;
       margin-left: 10px;
     }
+    
+    /* Toast Notifications */
+    .toast-notification {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 16px 24px;
+      border-radius: 12px;
+      color: white;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 10000;
+      transform: translateX(400px);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    }
+    .toast-notification.show {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    .toast-notification.success { background: linear-gradient(135deg, #22c55e, #16a34a); }
+    .toast-notification.error { background: linear-gradient(135deg, #ef4444, #dc2626); }
+    .toast-notification.info { background: linear-gradient(135deg, #163E8C, #1e4d8c); }
+    .toast-notification.warning { background: linear-gradient(135deg, #eab308, #ca8a04); }
   </style>
 </head>
 <body>
@@ -32,19 +59,19 @@
       <img src="assets/icons/logo.png" alt="Logo EMI" class="logo-img">
     </div>
     <nav class="sidebar-nav">
-      <a href="index.html" class="sidebar-item active">
+      <a href="PerfilExterno.html" class="sidebar-item active">
         <span class="material-symbols-outlined">home</span>
         <span class="sidebar-text">INICIO</span>
       </a>
-      <a href="calendarioEstudiantes.html" class="sidebar-item">
+      <a href="eventosPublicos.html" class="sidebar-item">
         <span class="material-symbols-outlined">public</span>
         <span class="sidebar-text">EVENTOS PÚBLICOS</span>
       </a>
-      <a href="Solicitudes.html" class="sidebar-item">
+      <a href="misRegistros.html" class="sidebar-item">
         <span class="material-symbols-outlined">confirmation_number</span>
         <span class="sidebar-text">MIS REGISTROS</span>
       </a>
-      <a href="#ayuda" class="sidebar-item">
+      <a href="ayuda.html" class="sidebar-item">
         <span class="material-symbols-outlined">help</span>
         <span class="sidebar-text">AYUDA</span>
       </a>
@@ -61,22 +88,6 @@
       <span class="material-symbols-outlined">search</span>
       <input type="text" placeholder="Buscar eventos..." class="search-input" id="searchInput">
     </div>
-  </header>
-              Mi Perfil
-            </a>
-            <a href="#configuracion" class="dropdown-item">
-              <span class="material-symbols-outlined">settings</span>
-              Configuración
-            </a>
-            <div class="dropdown-divider"></div>
-            <a href="../logout.php" class="dropdown-item logout">
-              <span class="material-symbols-outlined">logout</span>
-              Cerrar Sesión
-            </a>
-          </div>
-        </div>
-      </div>
-    </nav>
   </header>
 
   <!-- Main Content -->
